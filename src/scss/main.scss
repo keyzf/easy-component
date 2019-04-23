@@ -1,0 +1,28 @@
+@import './variable.scss';
+.easy-component{
+  height: 100%;
+  box-sizing: border-box;
+  .header{
+    height: 80px;
+    border-bottom: 1px solid #eee;
+  }
+  .main{
+    height: 100%;
+    margin-top: -80px;
+    box-sizing: border-box;    
+    .left{
+      flex:0 0 200px;
+      height: 100%;
+      border-right: 1px solid #eee;
+    }
+    .middle{
+      flex: 1;
+      height: 100%;
+    }
+    .right{
+      flex:0 0 200px;
+      height: 100%;
+      border-lefft: 1px solid #eee;
+    }
+  }
+}

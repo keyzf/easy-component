@@ -6,7 +6,12 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "target": "es5",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "baseUrl":".",
+    "paths": {
+      "@/*":["src/*"]
+    },
+    "types":["src/types"]
   },
   "include": [
     "src/**/*.tsx"

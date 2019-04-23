@@ -12,15 +12,30 @@ module.exports = {
   },
   devtool: "cheap-module-eval-source-map",
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js"],
+    alias: { 
+      '@':path.resolve(__dirname,'src')
+    }
   },
   module: {
     rules: [{
       test: /\.tsx?$/,
       loader: "ts-loader",
       options: {
-        configFile: resolve('tsconfig.test.json')
+        configFile: resolve('tsconfig.dev.json')
       }
+    },{
+      test:/\.scss$/,
+      use:[ 
+        'style-loader', //上面的简写方式
+        {
+          loader:'css-loader',
+          options:{
+            hashPrefix: "ko-"
+          }
+        },
+        'sass-loader'
+      ]
     }],
   },
   plugins: [

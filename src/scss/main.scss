@@ -1,28 +1,26 @@
 @import './variable.scss';
+$header-width:45px;
 .easy-component{
+  display: flex;
   height: 100%;
-  box-sizing: border-box;
-  .header{
-    height: 80px;
-    border-bottom: 1px solid #eee;
-  }
-  .main{
+  .left{
+    flex: 1;
     height: 100%;
-    margin-top: -80px;
-    box-sizing: border-box;    
-    .left{
-      flex:0 0 200px;
-      height: 100%;
-      border-right: 1px solid #eee;
+    padding-top: $header-width;
+    box-sizing: border-box;
+    .header{
+      height: $header-width;
+      margin-top: -$header-width;
+      box-sizing: border-box;
+      border-bottom: 1px solid #eee;
     }
-    .middle{
-      flex: 1;
+    .main{
       height: 100%;
     }
-    .right{
-      flex:0 0 200px;
-      height: 100%;
-      border-lefft: 1px solid #eee;
-    }
+  }
+  .right{
+    flex:0 0 200px;
+    height: 100%;
+    border-left: 1px solid #eee;
   }
 }

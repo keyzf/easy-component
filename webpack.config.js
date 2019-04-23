@@ -1,7 +1,9 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const tsImportPluginFactory = require('ts-import-plugin')
 const resolve = (filePath) => path.resolve(__dirname, filePath)
+
 const buildPath = resolve('example/dist')
 module.exports = {
   module: 'development',
@@ -13,7 +15,7 @@ module.exports = {
   devtool: "cheap-module-eval-source-map",
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
-    alias: { 
+    alias: {
       '@':path.resolve(__dirname,'src')
     }
   },
@@ -22,18 +24,34 @@ module.exports = {
       test: /\.tsx?$/,
       loader: "ts-loader",
       options: {
-        configFile: resolve('tsconfig.dev.json')
+        configFile: resolve('tsconfig.dev.json'),
+        getCustomTransformers: () => ({
+          before: [
+            tsImportPluginFactory({
+                libraryDirectory: 'es',
+                libraryName: 'antd',
+                style: true
+            })
+          ]
+        })
       }
     },{
-      test:/\.scss$/,
-      use:[ 
+      test:/\.less$/,
+      use:[
         'style-loader', //上面的简写方式
+        'css-loader',
         {
-          loader:'css-loader',
+          loader:'less-loader',
           options:{
-            hashPrefix: "ko-"
+            javascriptEnabled:true
           }
-        },
+        }
+      ]
+    },{
+      test:/\.scss$/,
+      use:[
+        'style-loader', //上面的简写方式
+        'css-loader',
         'sass-loader'
       ]
     }],

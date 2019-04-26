@@ -45,7 +45,11 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
       if(isOk) break;
     }
   }
-  loop(virtualDomData,matchId,null);
+  loop(virtualDomData,matchId,{
+    id:'root',
+    type:'root',
+    children:virtualDomData
+  });
   return {index,node,parentNode};
 };
 
@@ -66,7 +70,11 @@ export const findParentNodeByChildId = (virtualDomData:VirtualDom[],matchId:stri
       if(isOk) break;
     }
   }
-  loop(virtualDomData,matchId,null);
+  loop(virtualDomData,matchId,{
+    id:'root',
+    type:'root',
+    children:virtualDomData
+  });
   return parentNode;
 }
 
@@ -96,15 +104,16 @@ export default class VirtualDomTree extends React.PureComponent<VirtualDomTreePr
     const data = [...virtualDomData];
     // Find dragObject
     const dragNodeMatchedInfo = findNodeById(data,dragKey,true);
-    const dragNode = dragNodeMatchedInfo.node;
     const drogNodeIndex = dragNodeMatchedInfo.index;
+    const dragNode = dragNodeMatchedInfo.node;
     const drogNodeParent = dragNodeMatchedInfo.parentNode;
 
 
 
     const dropNodeMatchedInfo = findNodeById(data,dropKey,false);
+    const dropNodeIndex = dropNodeMatchedInfo.index;
     const dropNode = dropNodeMatchedInfo.node;
-    const dropNodeParent = dragNodeMatchedInfo.parentNode;
+    const dropNodeParent = dropNodeMatchedInfo.parentNode;
   
 
     if (!info.dropToGap) {
@@ -126,12 +135,11 @@ export default class VirtualDomTree extends React.PureComponent<VirtualDomTreePr
         Array.isArray(drogNodeParent.children)&&drogNodeParent.children.splice(drogNodeIndex-1,0,dragNode);
       }
     } else {
-      const index = dragNodeMatchedInfo.index;
       const nodeList = dropNodeParent.children;
       if (dropPosition === -1) {
-        Array.isArray(nodeList)&&nodeList.splice(index, 0, dragNode);
+        Array.isArray(nodeList)&&nodeList.splice(dropNodeIndex, 0, dragNode);
       } else {
-        Array.isArray(nodeList)&&nodeList.splice(index+1, 0, dragNode);
+        Array.isArray(nodeList)&&nodeList.splice(dropNodeIndex+1, 0, dragNode);
       }
     }
 

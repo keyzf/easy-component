@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "module": "system",
+    "module": "esnext",
     "moduleResolution": "node",
+    "isolatedModules": true,
     "jsx": "react",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
+    "skipLibCheck":true,
     "target": "es5",
     "outDir": "./lib",
     "baseUrl":".",

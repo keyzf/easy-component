@@ -1,18 +1,54 @@
 @import './variable.scss';
-$header-width:45px;
 .easy-component{
+  position: relative;
   display: flex;
   height: 100%;
+  .btn-exit-preview{
+    display: none;
+  }
+  &.preview{
+    .left{
+      padding-top: 0;
+      .header{
+        display: none;
+      }
+    }
+    .right{
+      display: none;
+    }
+    .btn-exit-preview{
+      position: absolute;
+      top:0;
+      left:0;
+      z-index: 1;
+      display: inline;
+      background: $primary-color;
+      padding: 2px 4px;
+      color: #fff;
+    }
+    *[data-highlightab]{
+      outline: none;
+    }
+  }
   .left{
     flex: 1;
     height: 100%;
-    padding-top: $header-width;
+    padding-top: $header-height;
     box-sizing: border-box;
     .header{
-      height: $header-width;
-      margin-top: -$header-width;
+      height: $header-height;
+      margin-top: -$header-height;
       box-sizing: border-box;
       border-bottom: 1px solid #eee;
+      color: #fff;
+      line-height: $header-height;
+      padding: 0 10px;
+      text-align: right;
+      background: $primary-color;
+      .btn-action{
+        color: #fff;
+        padding: 0 4px;
+      }
     }
     .main{
       height: 100%;
@@ -22,5 +58,8 @@ $header-width:45px;
     width: 250px;
     height: 100%;
     border-left: 1px solid #eee;
+  }
+  .color-primary{
+    color: $primary-color;
   }
 }

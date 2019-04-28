@@ -1,0 +1,17 @@
+@import '@/scss/variable.scss';
+
+.#{$prefix-class-name}-comp-toolbar{
+  position: absolute;
+  background: $primary-color;
+  color: #fff;
+  .tool-list{
+    margin: 0;
+    padding: 0;
+    .tool-item{
+      display: inline-block;
+      list-style: none;
+      cursor: pointer;
+      padding: 3px 7px; 
+    }
+  }
+}

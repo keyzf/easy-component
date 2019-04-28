@@ -1,10 +1,8 @@
 //创建唯一id
 export function createID():string{
-  return  Math.random()
+  return Math.random()
   .toString(36)
-  .substring(7)
-  .split('')
-  .join('.');
+  .substring(2,9);
 }
 
 //判断是否为字符串

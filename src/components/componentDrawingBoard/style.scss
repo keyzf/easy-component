@@ -1,3 +1,20 @@
-.component-drawing-board{
-
+@import '@/scss/variable.scss';
+.#{$prefix-class-name}-comp-drawing-board{
+  position: relative;
+  *[data-highlightab]{
+    outline: 1px dashed rgba(170,170,170,0.7);
+    outline-offset:-2px;
+  }
+  .#{$prefix-class-name}-#{$active-class-name}{
+    outline: 3px solid #3b97e3 !important;
+    outline-offset: -3px;
+  }
+}
+.preview{
+  *[data-highlightab]{
+    outline: none !important;
+  }
+  .#{$prefix-class-name}-#{$active-class-name}{
+    outline: none !important;
+  }
 }

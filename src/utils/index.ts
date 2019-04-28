@@ -4,13 +4,3 @@ export function createID():string{
   .toString(36)
   .substring(2,9);
 }
-
-//判断是否为字符串
-export function isString(value:any):boolean{
-  return Object.prototype.toString.call(value) === '[object String]';
-}
-
-//判断是否为函数
-export function isFunction(value:any):boolean{
-  return Object.prototype.toString.call(value) === '[object Function]';
-}

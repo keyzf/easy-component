@@ -2,7 +2,8 @@ import React,{ FunctionComponent, ComponentClass} from 'react';
 import {Tree} from 'antd';
 import PropTypes from 'prop-types';
 import {VirtualDom} from '@/constant';
-import {createID,isString,isFunction} from '@/utils';
+import {createID} from '@/utils';
+import {isString,isFunction} from 'lodash';
 const { TreeNode} = Tree;
 interface VirtualDomTreeProps{
   virtualDomData:VirtualDom[],

@@ -5,9 +5,11 @@
     "isolatedModules": true,
     "jsx": "react",
     "allowJs": true,
+    // "checkJs": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "skipLibCheck":true,
+    "listFiles":true,
     "target": "es5",
     "outDir": "./lib",
     "baseUrl":".",
@@ -20,11 +22,10 @@
       "es6",
       "es7",
       "es2015.promise"
-    ],
-    "typeRoots":["src/types"]
+    ]
   },
   "include": [
-    "src/**/*.tsx"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"

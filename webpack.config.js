@@ -24,7 +24,6 @@ module.exports = {
       test: /\.tsx?$/,
       loader: "ts-loader",
       options: {
-        configFile: resolve('tsconfig.dev.json'),
         getCustomTransformers: () => ({
           before: [
             tsImportPluginFactory({

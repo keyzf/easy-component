@@ -1,12 +1,14 @@
-import {FunctionComponent,ComponentClass} from 'react';
+import {ComponentType} from 'react';
 export const prefixClassName:string = 'es';
 export const activeClassName:string = `${prefixClassName}-selected-comp`;
 export const toolBarClassName:string = `${prefixClassName}-comp-toolbar`;
 export const headerHeight:number = 45;
 
+export type OperationType = 'delete' | 'copy' | 'findParent';
+
 export interface VirtualDom {
   id:string,
-  type:FunctionComponent|ComponentClass|string,
+  type:ComponentType|string,
   props?:any,
   children?:VirtualDom [] | string
 }

@@ -68,13 +68,6 @@ const PropertyItem = (props:PropertyItemProps)=>{
 }
 let currentNode:VirtualDom;
 class PropertyInfo extends React.PureComponent<PropertyInfoProps>{
-  readonly state= {
-    currentNode:{
-      props:{
-        style:{}
-      }
-    }
-  }
   static propTypes = {
     activeId:PropTypes.string,
     virtualDomData:PropTypes.array,

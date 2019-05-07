@@ -8,8 +8,8 @@ import {createID} from '@/utils';
 const { TreeNode} = Tree;
 interface VirtualDomTreeProps{
   virtualDomData:VirtualDom[],
-  onChange:Function,
-  onActiveIdChange:Function,
+  onChange(virtualDomData:VirtualDom[]):void
+  onActiveIdChange(activeId:string):void,
   activeId:string
 }
 

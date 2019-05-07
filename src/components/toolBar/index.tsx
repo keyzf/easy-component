@@ -1,7 +1,7 @@
 import React,{MouseEvent} from 'react';
 import PropTypes from 'prop-types';
 import {Icon} from 'antd';
-import {toolBarClassName} from '@/constant';
+import {toolBarClassName,OperationType} from '@/constant';
 import './style.scss';
 
 interface ToolBarState{
@@ -11,9 +11,9 @@ interface ToolBarState{
 }
 
 interface ToolBarProps{
-  onRemove:Function,
-  onCopy:Function,
-  onFindParent:Function
+  onRemove():void,
+  onCopy():void,
+  onFindParent():void,
 }
 export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarState> {
   readonly state ={
@@ -44,7 +44,7 @@ export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarSta
       left
     });
   }
-  handleAction=(type:string,e:MouseEvent<HTMLLIElement>)=>{
+  handleAction=(type:OperationType,e:MouseEvent<HTMLLIElement>)=>{
     e.stopPropagation();
     const {onRemove,onCopy,onFindParent} = this.props;
     switch(type){

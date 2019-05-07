@@ -3,17 +3,15 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
 import ToolBar from '@/components/toolBar';
-
 import './style.scss';
-
 interface ComponentDrawingBoardProps{
   status:string,
   virtualDomData:VirtualDom[],
   activeId:string,
-  onActiveIdChange:Function,
-  onRemove:Function,
-  onCopy:Function,
-  onFindParent:Function
+  onActiveIdChange(activeId:string):void,
+  onRemove():void,
+  onCopy():void,
+  onFindParent():void,
 }
 export default class ComponentDrawingBoard extends React.PureComponent<ComponentDrawingBoardProps>{
   static propTypes = {

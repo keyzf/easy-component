@@ -2,7 +2,7 @@ import React, { FunctionComponent} from 'react';
 import classnames from 'classnames';
 import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal,Layout} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import {VirtualDom,undoRecordList, redoRecordList} from '@/constant';
+import {OperationType,VirtualDom,undoRecordList,redoRecordList} from '@/constant';
 import {createID} from '@/utils';
 import ComponentDrawingBoard from '@/components/componentDrawingBoard';
 import PropertyInfo from '@/components/propertyInfo';
@@ -129,7 +129,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       virtualDomData
     });
   }
-  handleComponentDrawingBoardAction=(type:string)=>{
+  handleComponentDrawingBoardAction=(type:OperationType)=>{
     const {activeId,virtualDomData} = this.state;
     const data = [...virtualDomData];
     if(type==='delete'){

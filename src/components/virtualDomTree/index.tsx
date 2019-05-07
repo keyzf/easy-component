@@ -1,9 +1,10 @@
-import React,{ FunctionComponent, ComponentClass} from 'react';
+import React from 'react';
 import {Tree} from 'antd';
 import PropTypes from 'prop-types';
+import {isString,isFunction} from 'lodash';
+import noElement from '@/components/noElement';
 import {VirtualDom} from '@/constant';
 import {createID} from '@/utils';
-import {isString,isFunction} from 'lodash';
 const { TreeNode} = Tree;
 interface VirtualDomTreeProps{
   virtualDomData:VirtualDom[],
@@ -23,7 +24,7 @@ export const recreateNodeId=(virtualNode:VirtualDom)=>{
   }
   Array.isArray(virtualNode.children)&&loop(virtualNode.children)
   return virtualNode;
-} 
+}
 
 //根据id找到节点
 export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete:boolean):{index:number,parentNode:VirtualDom,node:VirtualDom}=>{
@@ -55,7 +56,7 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
   return {index,node,parentNode};
 };
 
-export default class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
+ class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
   static propTypes = {
     activeId:PropTypes.string,
     virtualDomData: PropTypes.array,
@@ -93,7 +94,6 @@ export default class VirtualDomTree extends React.PureComponent<VirtualDomTreePr
     const dropNodeIndex = dropNodeMatchedInfo.index;
     const dropNode = dropNodeMatchedInfo.node;
     const dropNodeParent = dropNodeMatchedInfo.parentNode;
-  
 
     if (!info.dropToGap) {
       if(dropNode.children===undefined) dropNode.children = [];
@@ -135,5 +135,7 @@ export default class VirtualDomTree extends React.PureComponent<VirtualDomTreePr
     );
   }
 }
+
+export default noElement(VirtualDomTree);
 
 

@@ -31,6 +31,7 @@
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
     "antd": "^3.16.5",
+    "hoist-non-react-statics": "^3.3.0",
     "lodash": "^4.17.11",
     "mb-sketch-ruler": "^1.1.0-dev.16",
     "react": "^16.8.5",

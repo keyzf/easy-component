@@ -1,4 +1,4 @@
-import React, { ReactElement} from 'react';
+import React, {ReactElement, ReactComponentElement} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
@@ -67,10 +67,10 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
           this.renderVirtualDom(virtualDomData)
         }
       </div>
-      <ToolBar 
-        ref={(comp)=>this.ToolBar=comp} 
-        onRemove={onRemove} 
-        onCopy={onCopy} 
+      <ToolBar
+        ref={(comp)=>this.ToolBar=comp}
+        onRemove={onRemove}
+        onCopy={onCopy}
         onFindParent={onFindParent}/>
     </div>);
   }

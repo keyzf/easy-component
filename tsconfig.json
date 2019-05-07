@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "esNext",
     "moduleResolution": "node",
-    "isolatedModules": true,
     "jsx": "react",
-    "allowJs": true,
-    // "checkJs": true,
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators":true,
     "noImplicitAny": true,
     "skipLibCheck":true,
     "listFiles":true,
@@ -18,10 +16,7 @@
     },
     "lib": [
       "dom",
-      "es5",
-      "es6",
-      "es7",
-      "es2015.promise"
+      "es2017"
     ]
   },
   "include": [

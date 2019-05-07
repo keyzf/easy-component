@@ -1,6 +1,6 @@
 import React, { FunctionComponent} from 'react';
 import classnames from 'classnames';
-import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal} from 'antd';
+import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal,Layout} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {VirtualDom,undoRecordList, redoRecordList} from '@/constant';
 import {createID} from '@/utils';
@@ -8,6 +8,7 @@ import ComponentDrawingBoard from '@/components/componentDrawingBoard';
 import PropertyInfo from '@/components/propertyInfo';
 import VirtualDomTree,{findNodeById,recreateNodeId} from '@/components/virtualDomTree';
 import ElementsPane from '@/components/elementsPane';
+import {SearchButton} from '@/basicComponents';
 import {cloneDeep} from 'lodash';
 import '@/scss/main.scss';
 const TabPane = Tabs.TabPane;
@@ -15,7 +16,7 @@ const confirm = Modal.confirm;
 
 interface EasyComponentProps{
 
-} 
+}
 
 interface ActionButton {
   title:string,
@@ -68,7 +69,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         },
         children:[{
           id:createID(),
-          type:Button,
+          type:SearchButton,
           children:'点击'
         },{
           id:createID(),
@@ -188,7 +189,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         status:'preview'
       });
     }else if(type==='undo'&&undoRecordList.length>1){
-      const{activeId,virtualDomData} = undoRecordList[1]; 
+      const{activeId,virtualDomData} = undoRecordList[1];
       redoRecordList.unshift(undoRecordList[0]);
       undoRecordList.shift();
       this.setState({
@@ -196,7 +197,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         virtualDomData
       });
     }else if(type==='redo'&&redoRecordList.length>0){
-      const{activeId,virtualDomData} = redoRecordList[0]; 
+      const{activeId,virtualDomData} = redoRecordList[0];
       undoRecordList.unshift(redoRecordList[0]);
       redoRecordList.shift();
       this.setState({
@@ -232,10 +233,10 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
 
             </header>
             <main className="main">
-              <ComponentDrawingBoard 
+              <ComponentDrawingBoard
                 status={status}
-                activeId={activeId} 
-                virtualDomData={virtualDomData} 
+                activeId={activeId}
+                virtualDomData={virtualDomData}
                 onRemove={this.handleComponentDrawingBoardAction.bind(this,'delete')}
                 onCopy={this.handleComponentDrawingBoardAction.bind(this,'copy')}
                 onFindParent={this.handleComponentDrawingBoardAction.bind(this,'findParent')}
@@ -244,15 +245,20 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
           </div>
           <div className="right">
             <Tabs>
-              <TabPane tab="元素" key="1"> <ElementsPane/></TabPane>
-              <TabPane tab="结构" key="2"> 
-                <VirtualDomTree 
-                  activeId={activeId} 
-                  virtualDomData={virtualDomData} 
-                  onChange={this.handleVirtualDomTreeChange} 
+              <TabPane tab="元素" key="1"> <ElementsPane activeId={activeId}/></TabPane>
+              <TabPane tab="结构" key="2">
+                <VirtualDomTree
+                  activeId={activeId}
+                  virtualDomData={virtualDomData}
+                  onChange={this.handleVirtualDomTreeChange}
                   onActiveIdChange={this.handleActiveIdChange}/>
               </TabPane>
-              <TabPane tab="属性" key="3"><PropertyInfo/></TabPane>
+              <TabPane tab="属性" key="3">
+                <PropertyInfo
+                  activeId={activeId}
+                  virtualDomData={virtualDomData}
+                  onChange={this.handleVirtualDomTreeChange}/>
+              </TabPane>
             </Tabs>
           </div>
         </div>

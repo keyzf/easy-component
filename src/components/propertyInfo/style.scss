@@ -1,5 +1,10 @@
 .component-property-info{
-  .property-item{
-    
+  height: 100%;
+  overflow:scroll;
+  .ant-collapse-content-box{
+    padding: 10px;
+  }
+  .divider-title{
+    margin-bottom: 0;
   }
 }

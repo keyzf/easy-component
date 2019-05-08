@@ -31,13 +31,13 @@
     }
   }
   .left{
-    flex: 1;
+    display: flex;
+    flex: auto;
     height: 100%;
-    padding-top: $header-height;
     box-sizing: border-box;
+    flex-direction: column;
     .header{
       height: $header-height;
-      margin-top: -$header-height;
       box-sizing: border-box;
       border-bottom: 1px solid #eee;
       color: #fff;
@@ -51,13 +51,18 @@
       }
     }
     .main{
-      height: 100%;
+      display: flex;
+      flex: auto;
     }
   }
   .right{
-    width: 250px;
+    width: $right-width;
     height: 100%;
+    overflow: scroll;
     border-left: 1px solid #eee;
+    .ant-tabs-top-bar{
+      margin: 0;
+    }
   }
   .color-primary{
     color: $primary-color;

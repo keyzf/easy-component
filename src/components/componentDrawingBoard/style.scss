@@ -1,6 +1,9 @@
 @import '@/scss/variable.scss';
 .#{$prefix-class-name}-comp-drawing-board{
+  flex: auto;
   position: relative;
+  overflow-x: hidden;
+  overflow-y: scroll;
   *[data-highlightab]{
     outline: 1px dashed rgba(170,170,170,0.7);
     outline-offset:-2px;

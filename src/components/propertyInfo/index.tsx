@@ -1,146 +1,273 @@
-import React, {KeyboardEventHandler,ReactElement, ChangeEventHandler } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {Collapse,Input,Select,Row,Col} from 'antd';
-import {isFunction,isArray,isUndefined} from 'lodash';
-import {VirtualDom} from '@/constant';
+import {Collapse,Row,Col,Divider} from 'antd';
+import {isFunction,isArray,isUndefined,isNull} from 'lodash';
+import {VirtualDom,nameMapToDefaultStyle,nameMapToLabel} from '@/constant';
 import noElement from '@/components/noElement';
 import {findNodeById} from '@/components/virtualDomTree';
+import PropertyItem from '@/components/propertyItem'
 
 import './style.scss';
 const Panel = Collapse.Panel;
-const Option = Select.Option;
-const unitsOptions = ['无','px','%','vh'];
-const unitReg = /px|%|vh/ig;
+const unitOptions = ['px','%','vh'];
+const fontSizeUnitOptions = ['px','em','rem','%'];
+const unitReg = /px|%|vh/i;
+const fontSizeUnitReg = /px|em|rem|%/i;
 
 interface PropertyInfoProps{
   activeId:string,
   virtualDomData:VirtualDom[],
   onChange(virtualDomData:VirtualDom[]):void
 }
-interface PropertyItemProps{
-  type:'input'|'inputWithUnit'|'select',
-  name:string,
-  value:string,
-  unit?:string,
-  units?:string[],
-  options?:[],
-  onChange:any
-}
-const PropertyItem = (props:PropertyItemProps)=>{
-  const {name,type,value,unit,units,options,onChange} = props;
-  let content:ReactElement = null;
-  if(type==='input'){
-    content=<Input defaultValue={value}  onChange={onChange}/>
-  }else if(type==='inputWithUnit'){
-    let finalValue = value,finalUnit = unit;
-    const handleInputChange:ChangeEventHandler<HTMLInputElement>=(e)=>{
-      finalValue=e.target.value;
-    }
-    const handleSelectChange=(selectValue:string)=>{
-      finalUnit=selectValue;
-      callback();
-    }
-    const callback = ()=>{
-      if(finalValue==='auto'&&finalUnit==='无'||finalValue!=='auto'&&finalUnit!=='无'){
-        isFunction(onChange)&&onChange([finalValue,finalUnit]);
-      }
-    }
-    content=<Input size="small" defaultValue={value} onChange={handleInputChange} onPressEnter={callback} addonAfter={
-      <Select size="small" defaultValue={unit} onChange={handleSelectChange}>
-        {
-          units.map((item)=><Option key={item} value={item}>{item}</Option>)
-        }
-      </Select>
-    }/>
-  }else if(type==='select'){
-    content= <Select defaultValue={value} onChange={onChange}>
-    {
-      options.map((item)=><Option key={item} value={item}>{item}</Option>)
-    }
-  </Select>
-  }
-  return <div className="property-item">
-    <div className="label">{name}</div>
-    <div className="content">
-      {content}
-    </div>
-  </div>
+interface PropertyInfoState{
 }
 let currentNode:VirtualDom;
-class PropertyInfo extends React.PureComponent<PropertyInfoProps>{
+class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoState>{
+  readonly state = {}
   static propTypes = {
     activeId:PropTypes.string,
     virtualDomData:PropTypes.array,
     onChange:PropTypes.func
   }
-  static getDerivedStateFromProps(nextProps:PropertyInfoProps):any{
+  firstLoad:boolean=true
+  static getDerivedStateFromProps(nextProps:PropertyInfoProps,prevState:PropertyInfoState):any{
     const {activeId,virtualDomData} = nextProps;
     currentNode=findNodeById(virtualDomData,activeId,false).node;
     return null;
   }
-  handlePropertyChange=(name:string,value:string|string[])=>{
-    const {onChange,virtualDomData} = this.props;
-    if(isUndefined(currentNode.props)){
-      currentNode.props={style:{}}
-    }else if(isUndefined(currentNode.props.style)){
-      currentNode.props.style={};
-    }
-    let finalStyle = currentNode.props.style;
-    if(isArray(value)){
-      if(value[0]==='auto'){
-        delete finalStyle[name];
-      }else{
-        finalStyle={
-          ...finalStyle,
-         [name]:(value as string[]).join('')
-        }
-      }
-      currentNode.props.style=finalStyle;
-      isFunction(onChange)&&onChange([...virtualDomData]);
-    }else{
-      finalStyle[name]=value;
-      currentNode.props.style=finalStyle;
-      isFunction(onChange)&&onChange([...virtualDomData]);
+  setDefaultStyle(node:VirtualDom){
+    if(isUndefined(node.props)){
+      node.props={style:{}}
+    }else if(isUndefined(node.props.style)){
+      node.props.style={};
     }
   }
+  handlePropertyChange=(name:string,value:string[])=>{
+    const {onChange,virtualDomData} = this.props;
+    this.setDefaultStyle(currentNode);
+    let finalStyle = currentNode.props.style;
+    finalStyle={
+      ...finalStyle,
+     [name]:value.join('')===nameMapToDefaultStyle[name]?undefined:(value as string[]).join('')
+    }
+    currentNode.props.style=finalStyle;
+    isFunction(onChange)&&onChange([...virtualDomData]);
+  }
   render(){
-    const {props} = currentNode;
+    const {props={},id} = currentNode;
     const {style={}} = props;
-    const {width,height} = style;
+    const {
+      position,
+      fontSize=nameMapToDefaultStyle.fontSize,
+      fontWeight=nameMapToDefaultStyle.fontWeight,
+      color=nameMapToDefaultStyle.color,
+      lineHeight=nameMapToDefaultStyle.lineHeight,
+      textAlign=nameMapToDefaultStyle.textAlign,
+      borderWidth=nameMapToDefaultStyle.borderWidth,
+      borderStyle=nameMapToDefaultStyle.borderStyle,
+      borderColor=nameMapToDefaultStyle.borderColor,
+      opacity=nameMapToDefaultStyle.opacity
+    } = style;
     return (<div className="component-property-info">
-      <Collapse>
+      <Collapse key={`property-info-${id}`} defaultActiveKey={["general"]}>
         <Panel header="综合" key="general">
-          <p>1323</p>
-        </Panel>
-        <Panel header="排列" key="alignment">
-          <p>1323</p>
+          <Row gutter={10}>
+            <Col span={12}>
+              <PropertyItem
+                type="select"
+                label={nameMapToLabel.position}
+                options={['static','absolute','relative']}
+                value={position?position:nameMapToDefaultStyle.position}
+                onChange={this.handlePropertyChange.bind(this,'position')}/>
+            </Col>
+          </Row>
+          <Row gutter={10}>
+            {
+              ['top','right','bottom','left'].map((key)=>{
+                const value:string = isUndefined(style[key])?nameMapToDefaultStyle[key]:style[key];
+                const unit = isNull(value.match(unitReg))?'px':value.match(unitReg)[0];
+                return  <Col key={key} span={12}>
+                  <PropertyItem
+                  type="inputWithUnit"
+                  label={nameMapToLabel[key]}
+                  unit={unit}
+                  units={unitOptions}
+                  value={value.replace(unitReg,'')}
+                  onChange={this.handlePropertyChange.bind(this,key)}/>
+                </Col>
+              })
+            }
+          </Row>
         </Panel>
         <Panel header="尺寸" key="dimension">
+          <Row gutter={10}>
+            {
+              ['width','height'].map((key)=>{
+                const value:string = isUndefined(style[key])?nameMapToDefaultStyle[key]:style[key];
+                const unit = isNull(value.match(unitReg))?'':value.match(unitReg)[0];
+                return  <Col key={key} span={12}>
+                <PropertyItem
+                  type="inputWithUnit"
+                  name={key}
+                  label={nameMapToLabel[key]}
+                  unit={unit}
+                  units={unitOptions}
+                  value={value.replace(unitReg,'')}
+                  onChange={this.handlePropertyChange.bind(this,key)}/>
+              </Col>
+              })
+            }
+          </Row>
+          <Divider className="divider-title">外边距</Divider>
+          <Row gutter={10}>
+            {
+              ['marginTop','marginRight','marginBottom','marginLeft'].map((key)=>{
+                const value:string = isUndefined(style[key])?nameMapToDefaultStyle[key]:style[key];
+                const unit = isNull(value.match(unitReg))?'px':value.match(unitReg)[0];
+                return  <Col key={key} span={12}>
+                <PropertyItem
+                  type="inputWithUnit"
+                  label={nameMapToLabel[key]}
+                  unit={unit}
+                  units={unitOptions}
+                  value={value.replace(unitReg,'')}
+                  onChange={this.handlePropertyChange.bind(this,key)}/>
+              </Col>
+              })
+            }
+          </Row>
+          <Divider className="divider-title">内边距</Divider>
+          <Row gutter={10}>
+            {
+              ['paddingTop','paddingRight','paddingBottom','paddingLeft'].map((key)=>{
+                const value:string = isUndefined(style[key])?nameMapToDefaultStyle[key]:style[key];
+                const unit = isNull(value.match(unitReg))?'px':value.match(unitReg)[0];
+                return  <Col key={key} span={12}>
+                <PropertyItem
+                  type="inputWithUnit"
+                  label={nameMapToLabel[key]}
+                  unit={unit}
+                  units={unitOptions}
+                  value={value.replace(unitReg,'')}
+                  onChange={this.handlePropertyChange.bind(this,key)}/>
+              </Col>
+              })
+            }
+          </Row>
+        </Panel>
+        <Panel header="排版" key="typography">
           <Row gutter={10}>
             <Col span={12}>
               <PropertyItem
                 type="inputWithUnit"
-                name="width"
-                unit={width?width.match(unitReg):'无'}
-                units={unitsOptions}
-                value={width?width.replace(unitReg,''):'auto'}
-                onChange={this.handlePropertyChange.bind(this,'width')}/>
+                label={nameMapToLabel.fontSize}
+                name="fontSize"
+                unit={isNull(fontSize.match(fontSizeUnitReg))?'':fontSize.match(fontSizeUnitReg)[0]}
+                units={fontSizeUnitOptions}
+                value={(fontSize).replace(fontSizeUnitReg,'')}
+                onChange={this.handlePropertyChange.bind(this,'fontSize')}/>
             </Col>
             <Col span={12}>
               <PropertyItem
-                type="inputWithUnit"
-                name="height"
-                unit={height?height.match(unitReg):'无'}
-                units={unitsOptions}
-                value={height?height.replace(unitReg,''):'auto'}
-                onChange={this.handlePropertyChange.bind(this,'height')}/>
+                type="select"
+                label={nameMapToLabel.fontWeight}
+                name="fontWeight"
+                options={['100','200','300','400','500','600','700','800','900']}
+                value={fontWeight}
+                onChange={this.handlePropertyChange.bind(this,'fontWeight')}/>
             </Col>
           </Row>
-        </Panel>
-        <Panel header="排版" key="typography">
-          <p>1323</p>
+          <Row gutter={10}>
+            <Col span={12}>
+              <PropertyItem
+                type="inputWithUnit"
+                label={nameMapToLabel.lineHeight}
+                name="lineHeight"
+                unit={isNull(lineHeight.match(fontSizeUnitReg))?'':lineHeight.match(fontSizeUnitReg)[0]}
+                units={fontSizeUnitOptions}
+                value={(lineHeight).replace(fontSizeUnitReg,'')}
+                onChange={this.handlePropertyChange.bind(this,'lineHeight')}/>
+            </Col>
+          </Row>
+          <div>
+            <PropertyItem
+              type="colorPicker"
+              label={nameMapToLabel.color}
+              value={color}
+              onChange={this.handlePropertyChange.bind(this,'color')}/>
+          </div>
+          <div>
+            <PropertyItem
+              type="iconRadio"
+              label={nameMapToLabel.textAlign}
+              value={textAlign}
+              options={[{
+                label:'align-left',
+                value:'left'
+              },{
+                label:'align-center',
+                value:'center'
+              },{
+                label:'align-right',
+                value:'right'
+              }]}
+              onChange={this.handlePropertyChange.bind(this,'textAlign')}/>
+          </div>
         </Panel>
         <Panel header="装饰" key="decoration">
+           <div>
+              <PropertyItem
+                type="slider"
+                label={nameMapToLabel.opacity}
+                value={opacity}
+                onChange={this.handlePropertyChange.bind(this,'opacity')}/>
+          </div>
+          <Divider className="divider-title">边框</Divider>
+          <Row gutter={10}>
+            <Col span={12}>
+              <PropertyItem
+                type="inputWithUnit"
+                label={nameMapToLabel.borderWidth}
+                unit={isNull(borderWidth.match(unitReg))?'px':borderWidth.match(unitReg)[0]}
+                units={['px','em']}
+                value={(borderWidth).replace(unitReg,'')}
+                onChange={this.handlePropertyChange.bind(this,'borderWidth')}/>
+            </Col>
+            <Col span={12}>
+              <PropertyItem
+                type="select"
+                label={nameMapToLabel.borderStyle}
+                options={['solid','dotted','double','dashed']}
+                allowClear={true}
+                value={borderStyle}
+                onChange={this.handlePropertyChange.bind(this,'borderStyle')}/>
+            </Col>
+          </Row>
+          <div>
+            <PropertyItem
+              type="colorPicker"
+              label={nameMapToLabel.borderColor}
+              value={borderColor}
+              onChange={this.handlePropertyChange.bind(this,'borderColor')}/>
+          </div>
+          <Divider className="divider-title">边框圆角</Divider>
+          <Row gutter={10}>
+          {
+              ['borderTopLeftRadius','borderTopRightRadius','borderBottomLeftRadius','borderBottomRightRadius'].map((key)=>{
+                const value:string = isUndefined(style[key])?nameMapToDefaultStyle[key]:style[key];
+                const unit = isNull(value.match(unitReg))?'px':value.match(unitReg)[0];
+                return  <Col key={key} span={12}>
+                <PropertyItem
+                  type="inputWithUnit"
+                  label={nameMapToLabel[key]}
+                  unit={unit}
+                  units={unitOptions.filter((unit)=>unit!=='vh')}
+                  value={value.replace(unitReg,'')}
+                  onChange={this.handlePropertyChange.bind(this,key)}/>
+              </Col>
+              })
+            }
+          </Row>
         </Panel>
       </Collapse>
     </div>)

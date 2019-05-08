@@ -24,6 +24,7 @@ interface ActionButton {
 }
 interface EasyComponentState{
   activeId:string,
+  activeTab:string,
   virtualDomData:VirtualDom[],
   actionButtonList:ActionButton[],
   status:string
@@ -31,6 +32,7 @@ interface EasyComponentState{
 export default class EasyComponent extends React.PureComponent<EasyComponentProps,EasyComponentState>{
   readonly state={
     activeId:'',
+    activeTab:'virtualDomTree',
     actionButtonList:[{
       title:'预览',
       key:'preview',
@@ -76,7 +78,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
           type:Button,
           props:{
             style:{
-              marginLeft:10
+              marginLeft:'10px'
             }
           },
           children:'hello'
@@ -86,7 +88,10 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         type:Row,
         props:{
           style:{
-            padding:'10px'
+            paddingTop:'10px',
+            paddingRight:'20px',
+            paddingBottom:'10px',
+            paddingLeft:'10px'
           }
         },
         children:[{
@@ -206,6 +211,11 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       });
     }
   }
+  handleTabChange=(key:string)=>{
+    this.setState({
+      activeTab:key
+    });
+  }
   componentDidMount(){
     const {activeId,virtualDomData} = this.state;
     undoRecordList.push({
@@ -214,7 +224,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
     });
   }
   render() {
-    const {virtualDomData,activeId,actionButtonList,status} = this.state;
+    const {virtualDomData,activeId,activeTab,actionButtonList,status} = this.state;
     return (
       <LocaleProvider locale={zhCN}>
         <div className={classnames("easy-component",{
@@ -244,22 +254,27 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
             </main>
           </div>
           <div className="right">
-            <Tabs>
-              <TabPane tab="元素" key="1"> <ElementsPane activeId={activeId}/></TabPane>
-              <TabPane tab="结构" key="2">
-                <VirtualDomTree
-                  activeId={activeId}
-                  virtualDomData={virtualDomData}
-                  onChange={this.handleVirtualDomTreeChange}
-                  onActiveIdChange={this.handleActiveIdChange}/>
-              </TabPane>
-              <TabPane tab="属性" key="3">
-                <PropertyInfo
-                  activeId={activeId}
-                  virtualDomData={virtualDomData}
-                  onChange={this.handleVirtualDomTreeChange}/>
-              </TabPane>
+            <Tabs onChange={this.handleTabChange} activeKey={activeTab}>
+              <TabPane tab="元素" key="elementsPane"></TabPane>
+              <TabPane tab="结构" key="virtualDomTree"></TabPane>
+              <TabPane tab="属性" key="propertyInfo"></TabPane>
             </Tabs>
+            {
+              activeTab==='elementsPane'&&<ElementsPane activeId={activeId}/>
+            }
+            {
+              activeTab==='virtualDomTree'&& <VirtualDomTree
+                                  activeId={activeId}
+                                  virtualDomData={virtualDomData}
+                                  onChange={this.handleVirtualDomTreeChange}
+                                  onActiveIdChange={this.handleActiveIdChange}/>
+            }
+            {
+              activeTab==='propertyInfo'&& <PropertyInfo
+                                  activeId={activeId}
+                                  virtualDomData={virtualDomData}
+                                  onChange={this.handleVirtualDomTreeChange}/>
+            }
           </div>
         </div>
       </LocaleProvider>

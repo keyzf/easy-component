@@ -60,11 +60,9 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
   render(){
     const {virtualDomData,onRemove,onCopy,onFindParent} = this.props;
     return (<div className={`${prefixClassName}-comp-drawing-board`}>
-      <div>
-        {
-          this.renderVirtualDom(virtualDomData)
-        }
-      </div>
+      {
+        this.renderVirtualDom(virtualDomData)
+      }
       <ToolBar
         ref={(comp)=>this.ToolBar=comp}
         onRemove={onRemove}

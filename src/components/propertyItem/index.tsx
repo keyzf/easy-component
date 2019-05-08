@@ -90,7 +90,7 @@ export default React.memo((props:PropertyItemProps)=>{
   }else if(type==='colorPicker'){
     content=<Input size="small" value={innerState.value} onChange={handleInputChange} addonAfter={
       <Dropdown visible={colorPickerVisible} overlay={<SketchPicker color={innerState.value} onChangeComplete={handleColorChange}/>}>
-        <div style={{height:10,width:10,background:innerState.value}} onClick={()=>{setColorPickerVisible(true)}}></div>
+        <a href="javascript:void(0);" style={{display:'block',height:10,width:10,background:innerState.value}} onClick={()=>{setColorPickerVisible(true)}}></a>
       </Dropdown>
     }/>
   }else if(type==='slider'){

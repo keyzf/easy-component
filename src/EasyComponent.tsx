@@ -8,7 +8,6 @@ import ComponentDrawingBoard from '@/components/componentDrawingBoard';
 import PropertyInfo from '@/components/propertyInfo';
 import VirtualDomTree,{findNodeById,recreateNodeId} from '@/components/virtualDomTree';
 import ElementsPane from '@/components/elementsPane';
-import {SearchButton} from '@/basicComponents';
 import {cloneDeep} from 'lodash';
 import '@/scss/main.scss';
 const TabPane = Tabs.TabPane;
@@ -54,54 +53,52 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
     virtualDomData:[{
       id:createID(),
       type:'div',
-      props:{
-        style:{
-          padding:'10px'
-        }
+      style:{
+        padding:'10px'
       },
       children:[{
         id:createID(),
         type:'div',
         props:{
           className:'table-wrapper',
-          style:{
-            color:'red',
-            padding:'10px'
-          }
+        },
+        style:{
+          color:'red',
+          padding:'10px'
         },
         children:[{
           id:createID(),
-          type:SearchButton,
+          type:Button,
+          props:{
+            type:'primary',
+            icon:'search'
+          },
           children:'点击'
         },{
           id:createID(),
           type:Button,
-          props:{
-            style:{
-              marginLeft:'10px'
-            }
+          style:{
+            marginLeft:'10px'
           },
           children:'hello'
         }]
       },{
         id:createID(),
         type:Row,
-        props:{
-          style:{
-            paddingTop:'10px',
-            paddingRight:'20px',
-            paddingBottom:'10px',
-            paddingLeft:'10px'
-          }
+        style:{
+          paddingTop:'10px',
+          paddingRight:'20px',
+          paddingBottom:'10px',
+          paddingLeft:'10px'
         },
         children:[{
           id:createID(),
           type:Col,
           props:{
-            style:{
-              padding:'10px'
-            },
             span:4
+          },
+          style:{
+            padding:'10px'
           },
           children:[{
             id:createID(),
@@ -236,7 +233,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               {
                 actionButtonList.map((actionButton)=>{
                   const {title,icon,key} = actionButton;
-                  const wrappedContent = <a className="btn-action" href="javascript:void(0);" onClick={this.handleActionButtonClick.bind(this,key)}><Icon type={icon} /></a> 
+                  const wrappedContent = <a className="btn-action" href="javascript:void(0);" onClick={this.handleActionButtonClick.bind(this,key)}><Icon type={icon} /></a>
                   return <Tooltip key={key} title={title}>{wrappedContent}</Tooltip>
                 })
               }

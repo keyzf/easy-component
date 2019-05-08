@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Collapse,Row,Col,Divider} from 'antd';
-import {isFunction,isArray,isUndefined,isNull} from 'lodash';
+import {isFunction,assign,isUndefined,isNull} from 'lodash';
 import {VirtualDom,nameMapToDefaultStyle,nameMapToLabel} from '@/constant';
 import noElement from '@/components/noElement';
 import {findNodeById} from '@/components/virtualDomTree';
@@ -35,27 +35,18 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
     currentNode=findNodeById(virtualDomData,activeId,false).node;
     return null;
   }
-  setDefaultStyle(node:VirtualDom){
-    if(isUndefined(node.props)){
-      node.props={style:{}}
-    }else if(isUndefined(node.props.style)){
-      node.props.style={};
-    }
-  }
   handlePropertyChange=(name:string,value:string[])=>{
     const {onChange,virtualDomData} = this.props;
-    this.setDefaultStyle(currentNode);
-    let finalStyle = currentNode.props.style;
+    let finalStyle = assign({},currentNode.style);
     finalStyle={
       ...finalStyle,
      [name]:value.join('')===nameMapToDefaultStyle[name]?undefined:(value as string[]).join('')
     }
-    currentNode.props.style=finalStyle;
+    currentNode.style=finalStyle;
     isFunction(onChange)&&onChange([...virtualDomData]);
   }
   render(){
-    const {props={},id} = currentNode;
-    const {style={}} = props;
+    const {style={},id} = currentNode;
     const {
       position,
       fontSize=nameMapToDefaultStyle.fontSize,

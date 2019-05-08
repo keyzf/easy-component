@@ -77,7 +77,12 @@ export const nameMapToLabel:{
 export interface VirtualDom {
   id:string,
   type:ComponentType|string,
-  props?:any,
+  props?:{
+    [propName:string]:any
+  },
+  style?:{
+    [propName:string]:string
+  },
   children?:VirtualDom [] | string
 }
 

@@ -1,6 +1,7 @@
 import React, {ReactElement, ReactComponentElement} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import {assign} from 'lodash';
 import {prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
 import ToolBar from '@/components/toolBar';
 import './style.scss';
@@ -24,13 +25,13 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
   renderVirtualDom(data?:VirtualDom []|string):ReactElement[]|string{
     const {activeId,onActiveIdChange} = this.props;
     return Array.isArray(data)?data.map((item)=>{
-      const {id,type,props={},children} = item;
+      const {id,type,props={},style,children} = item;
       const newProps = {...props};
       newProps['data-highlightab']='1';
-
       if(!newProps.key){
         newProps.key=id;
       }
+      newProps.style=assign({},newProps.style,style);
       newProps.className = classnames(newProps.className,{
         [activeClassName]:activeId===id
       });

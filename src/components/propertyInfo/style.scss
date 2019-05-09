@@ -1,4 +1,5 @@
-.component-property-info{
+@import '@/scss/variable.scss';
+.#{$prefix-class-name}-component-property-info{
   height: 100%;
   overflow:scroll;
   .ant-collapse-content-box{

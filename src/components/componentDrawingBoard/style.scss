@@ -13,11 +13,3 @@
     outline-offset: -3px;
   }
 }
-.preview{
-  *[data-highlightab]{
-    outline: none !important;
-  }
-  .#{$prefix-class-name}-#{$active-class-name}{
-    outline: none !important;
-  }
-}

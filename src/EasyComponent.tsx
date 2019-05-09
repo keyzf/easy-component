@@ -8,7 +8,7 @@ import ComponentDrawingBoard from '@/components/componentDrawingBoard';
 import PropertyInfo from '@/components/propertyInfo';
 import VirtualDomTree,{findNodeById,recreateNodeId} from '@/components/virtualDomTree';
 import ElementsPane from '@/components/elementsPane';
-import {cloneDeep} from 'lodash';
+import {cloneDeep,isUndefined} from 'lodash';
 import '@/scss/main.scss';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -33,6 +33,19 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
     activeId:'',
     activeTab:'virtualDomTree',
     actionButtonList:[{
+      title:'边框',
+      key:'border',
+      icon:'border',
+      status:'normal'
+    },{
+      title:'无边框',
+      key:'no-border',
+      icon:'border',
+      status:'no-border',
+      style:{
+        color:'rgba(170,170,170,0.7)'
+      }
+    },{
       title:'预览',
       key:'preview',
       icon:'eye'
@@ -190,6 +203,14 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       this.setState({
         status:'preview'
       });
+    }else if(type==='border'){
+      this.setState({
+        status:'no-border'
+      });
+    }else if(type==='no-border'){
+      this.setState({
+        status:'normal'
+      });
     }else if(type==='undo'&&undoRecordList.length>1){
       const{activeId,virtualDomData} = undoRecordList[1];
       redoRecordList.unshift(undoRecordList[0]);
@@ -231,9 +252,9 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
           <div className="left">
             <header className="header">
               {
-                actionButtonList.map((actionButton)=>{
-                  const {title,icon,key} = actionButton;
-                  const wrappedContent = <a className="btn-action" href="javascript:void(0);" onClick={this.handleActionButtonClick.bind(this,key)}><Icon type={icon} /></a>
+                actionButtonList.filter((actionButton)=>isUndefined(actionButton.status)||actionButton.status===status).map((actionButton)=>{
+                  const {title,icon,key,style} = actionButton;
+                  const wrappedContent = <a className="btn-action" href="javascript:void(0);" onClick={this.handleActionButtonClick.bind(this,key)}><Icon style={style} type={icon} /></a>
                   return <Tooltip key={key} title={title}>{wrappedContent}</Tooltip>
                 })
               }
@@ -256,22 +277,9 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               <TabPane tab="结构" key="virtualDomTree"></TabPane>
               <TabPane tab="属性" key="propertyInfo"></TabPane>
             </Tabs>
-            {
-              activeTab==='elementsPane'&&<ElementsPane activeId={activeId}/>
-            }
-            {
-              activeTab==='virtualDomTree'&& <VirtualDomTree
-                                  activeId={activeId}
-                                  virtualDomData={virtualDomData}
-                                  onChange={this.handleVirtualDomTreeChange}
-                                  onActiveIdChange={this.handleActiveIdChange}/>
-            }
-            {
-              activeTab==='propertyInfo'&& <PropertyInfo
-                                  activeId={activeId}
-                                  virtualDomData={virtualDomData}
-                                  onChange={this.handleVirtualDomTreeChange}/>
-            }
+            {activeTab==='elementsPane'&&<ElementsPane activeId={activeId}/>}
+            {activeTab==='virtualDomTree'&& <VirtualDomTree activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange} onActiveIdChange={this.handleActiveIdChange}/>}
+            {activeTab==='propertyInfo'&& <PropertyInfo activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange}/>}
           </div>
         </div>
       </LocaleProvider>

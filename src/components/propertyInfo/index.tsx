@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Collapse,Row,Col,Divider} from 'antd';
 import {isFunction,assign,isUndefined,isNull} from 'lodash';
-import {VirtualDom,nameMapToDefaultStyle,nameMapToLabel} from '@/constant';
+import {VirtualDom,nameMapToDefaultStyle,nameMapToLabel,prefixClassName} from '@/constant';
 import noElement from '@/components/noElement';
 import {findNodeById} from '@/components/virtualDomTree';
 import PropertyItem from '@/components/propertyItem'
@@ -57,9 +57,10 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
       borderWidth=nameMapToDefaultStyle.borderWidth,
       borderStyle=nameMapToDefaultStyle.borderStyle,
       borderColor=nameMapToDefaultStyle.borderColor,
-      opacity=nameMapToDefaultStyle.opacity
+      opacity=nameMapToDefaultStyle.opacity,
+      background=nameMapToDefaultStyle.background
     } = style;
-    return (<div className="component-property-info">
+    return (<div className={`${prefixClassName}-component-property-info`}>
       <Collapse key={`property-info-${id}`} defaultActiveKey={["general"]}>
         <Panel header="综合" key="general">
           <Row gutter={10}>
@@ -212,6 +213,13 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
                 label={nameMapToLabel.opacity}
                 value={opacity}
                 onChange={this.handlePropertyChange.bind(this,'opacity')}/>
+          </div>
+          <div>
+            <PropertyItem
+              type="colorPicker"
+              label={nameMapToLabel.background}
+              value={background}
+              onChange={this.handlePropertyChange.bind(this,'background')}/>
           </div>
           <Divider className="divider-title">边框</Divider>
           <Row gutter={10}>

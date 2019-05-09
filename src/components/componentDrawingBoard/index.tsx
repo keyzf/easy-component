@@ -1,4 +1,4 @@
-import React, {ReactElement, ReactComponentElement} from 'react';
+import React, {ReactElement} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {assign} from 'lodash';
@@ -23,11 +23,14 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
   }
   ToolBar:any
   renderVirtualDom(data?:VirtualDom []|string):ReactElement[]|string{
-    const {activeId,onActiveIdChange} = this.props;
+    const {status,activeId,onActiveIdChange} = this.props;
     return Array.isArray(data)?data.map((item)=>{
       const {id,type,props={},style,children} = item;
       const newProps = {...props};
-      newProps['data-highlightab']='1';
+
+      if(['preview','no-border'].indexOf(status)<0){
+        newProps['data-highlightab']='1';
+      }
       if(!newProps.key){
         newProps.key=id;
       }
@@ -59,7 +62,7 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
     }
   }
   render(){
-    const {virtualDomData,onRemove,onCopy,onFindParent} = this.props;
+    const {status,virtualDomData,onRemove,onCopy,onFindParent} = this.props;
     return (<div className={`${prefixClassName}-comp-drawing-board`}>
       {
         this.renderVirtualDom(virtualDomData)

@@ -1,6 +1,6 @@
 @import '@/scss/variable.scss';
 
-.#{$prefix-class-name}-comp-toolbar{
+.#{$toolBarClassName}{
   position: absolute;
   background: $primary-color;
   color: #fff;
@@ -11,7 +11,7 @@
       display: inline-block;
       list-style: none;
       cursor: pointer;
-      padding: 3px 7px; 
+      padding: 3px 7px;
     }
   }
 }

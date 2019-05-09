@@ -3,7 +3,7 @@ import {Input,Select,Dropdown,Slider,Radio,Icon} from 'antd';
 import {isFunction} from 'lodash';
 import { SketchPicker } from 'react-color';
 import './style.scss';
-import { nameMapToDefaultStyle,prefixClassName } from '@/constant';
+import { nameMapToDefaultStyle,propertyItemClassName} from '@/constant';
 import { RadioChangeEvent } from 'antd/lib/radio/interface';
 const Option = Select.Option;
 interface PropertyItemProps{
@@ -105,7 +105,7 @@ export default React.memo((props:PropertyItemProps)=>{
       }
     </Radio.Group>
   }
-  return <div className={`${prefixClassName}-component-property-item`}>
+  return <div className={propertyItemClassName}>
     <div className="label">{label}</div>
     <div className="content">
       {content}

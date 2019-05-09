@@ -1,10 +1,10 @@
 @import '@/scss/variable.scss';
-.#{$prefix-class-name}-comp-drawing-board{
+.#{$drawingBoardClassName}{
   flex: auto;
   position: relative;
   overflow-x: hidden;
   overflow-y: scroll;
-  .#{$prefix-class-name}-comp-drawing-board-main{
+  .#{$prefix-class-name}-main{
     height: 100%;
     width: 100%;
   }

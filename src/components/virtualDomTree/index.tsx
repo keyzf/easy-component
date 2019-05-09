@@ -3,7 +3,7 @@ import {Tree} from 'antd';
 import PropTypes from 'prop-types';
 import {isString,isFunction,isUndefined} from 'lodash';
 import noElement from '@/components/noElement';
-import {VirtualDom} from '@/constant';
+import {VirtualDom,virtualDomTreeClassName} from '@/constant';
 import {createID} from '@/utils';
 const { TreeNode} = Tree;
 interface VirtualDomTreeProps{
@@ -151,7 +151,7 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
   render() {
     const {activeId,virtualDomData} = this.props;
     return (
-      <div className="component-virtual-dom-tree">
+      <div className={virtualDomTreeClassName}>
         <Tree
           draggable
           blockNode

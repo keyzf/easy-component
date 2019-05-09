@@ -2,12 +2,12 @@ import React, {ReactElement,DragEvent} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {assign,isFunction} from 'lodash';
-import {prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
+import {drawingBoardClassName,prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
 import ToolBar from '@/components/toolBar';
 import {moveNode} from '@/components/virtualDomTree';
 import {dropTarget} from '../dragDrop';
 import './style.scss';
-interface ComponentDrawingBoardProps{
+interface DrawingBoardProps{
   status:string,
   virtualDomData:VirtualDom[],
   activeId:string,
@@ -17,10 +17,10 @@ interface ComponentDrawingBoardProps{
   onCopy():void,
   onFindParent():void,
 }
-interface ComponentDrawingBoardState{
+interface DrawingBoardState{
   hoverId:string
 }
-export default class ComponentDrawingBoard extends React.PureComponent<ComponentDrawingBoardProps,ComponentDrawingBoardState>{
+export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,DrawingBoardState>{
   readonly state = {
     hoverId:''
   }
@@ -103,10 +103,10 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
   }
   render(){
     const {virtualDomData,activeId,onRemove,onCopy,onFindParent} = this.props;
-    return (<div className={`${prefixClassName}-comp-drawing-board`}>
+    return (<div className={drawingBoardClassName}>
       {
         React.createElement('div',{
-          className:`${prefixClassName}-comp-drawing-board-main`,
+          className:`${prefixClassName}-main`,
           onDrop:()=>{
             activeId!==''&&this.ToolBar.show();
             this.setState({

@@ -2,9 +2,9 @@ import React, { FunctionComponent} from 'react';
 import classnames from 'classnames';
 import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal,Layout} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import {OperationType,VirtualDom,undoRecordList,redoRecordList} from '@/constant';
+import {mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from '@/constant';
 import {createID} from '@/utils';
-import ComponentDrawingBoard from '@/components/componentDrawingBoard';
+import DrawingBoard from '@/components/drawingBoard';
 import PropertyInfo from '@/components/propertyInfo';
 import VirtualDomTree,{findNodeById,recreateNodeId} from '@/components/virtualDomTree';
 import ElementsPane from '@/components/elementsPane';
@@ -248,7 +248,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
     const {virtualDomData,activeId,activeTab,actionButtonList,status} = this.state;
     return (
       <LocaleProvider locale={zhCN}>
-        <div className={classnames("easy-component",{
+        <div className={classnames(mainClassName,{
           "preview":status==='preview'
         })}>
           <a className="btn-exit-preview" href="javascript:void(0);" onClick={()=>this.setState({status:'normal'})}><Icon type="eye-invisible" /></a>
@@ -264,7 +264,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
 
             </header>
             <main className="main">
-              <ComponentDrawingBoard
+              <DrawingBoard
                 status={status}
                 activeId={activeId}
                 virtualDomData={virtualDomData}

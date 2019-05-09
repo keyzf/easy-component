@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import noElement from '@/components/noElement';
+import {elementsPaneClassName} from '@/constant'
 
 interface ElementsPaneProps{
   activeId:string
@@ -12,7 +13,7 @@ class ElementsPane extends React.PureComponent<ElementsPaneProps> {
   render() {
     const {activeId} = this.props;
     return (
-      <div className="comp-elements-pane">
+      <div className={elementsPaneClassName}>
         元素
       </div>
     )

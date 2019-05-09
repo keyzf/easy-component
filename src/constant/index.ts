@@ -1,13 +1,19 @@
 import {ComponentType} from 'react';
 export const prefixClassName:string = 'es';
 export const activeClassName:string = `${prefixClassName}-selected-comp`;
+
+//组件类名
+export const mainClassName:string = 'easy-component';
 export const toolBarClassName:string = `${prefixClassName}-comp-toolbar`;
+export const propertyItemClassName:string = `${prefixClassName}-comp-property-item`;
+export const propertyInfoClassName:string = `${prefixClassName}-comp-property-info`;
+export const drawingBoardClassName:string = `${prefixClassName}-comp-drawing-board`;
+export const elementsPaneClassName:string =  `${prefixClassName}-comp-elements-pane`;
+export const virtualDomTreeClassName:string = `${prefixClassName}-comp-virtual-dom-tree`;
+
+
 export const headerHeight:number = 45;
-
 export type OperationType = 'delete' | 'copy' | 'findParent';
-
-
-
 export const nameMapToDefaultStyle:{
   [propName:string]:string
 } = {

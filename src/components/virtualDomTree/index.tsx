@@ -1,10 +1,10 @@
 import React from 'react';
 import {Tree} from 'antd';
 import PropTypes from 'prop-types';
-import {isString,isFunction,isUndefined} from 'lodash';
-import noElement from '@/components/noElement';
+import {isString,isFunction,isUndefined,isArray} from 'lodash';
 import {VirtualDom,virtualDomTreeClassName} from '@/constant';
 import {createID} from '@/utils';
+import { AntTreeNodeDropEvent } from 'antd/lib/tree/Tree';
 const { TreeNode} = Tree;
 interface VirtualDomTreeProps{
   virtualDomData:VirtualDom[],
@@ -19,10 +19,10 @@ export const recreateNodeId=(virtualNode:VirtualDom)=>{
   const loop = function(data:VirtualDom[]){
     data.forEach((item)=>{
       item.id=createID();
-      Array.isArray(item.children)&&loop(item.children)
+      isArray(item.children)&&loop(item.children)
     })
   }
-  Array.isArray(virtualNode.children)&&loop(virtualNode.children)
+  isArray(virtualNode.children)&&loop(virtualNode.children)
   return virtualNode;
 }
 //移动节点
@@ -41,7 +41,7 @@ export const moveNode=(virtualDomData:VirtualDom[],nodeId:string,parentId:string
         parentNode=item;
       }
       if(parentNode&&node) break;
-      Array.isArray(children)&&loop(children,item)
+      isArray(children)&&loop(children,item)
     }
   }
   loop(virtualDomData,{
@@ -72,10 +72,10 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
         node = item;
         parentNode = parent;
         index = i;
-        parent&&Array.isArray(parent.children)&&isDelete&&parent.children.splice(i,1);
+        parent&&isArray(parent.children)&&isDelete&&parent.children.splice(i,1);
         isOk = true;
       }else{
-        Array.isArray(children)&&loop(children,matchId,item)
+        isArray(children)&&loop(children,matchId,item)
       }
       if(isOk) break;
     }
@@ -87,8 +87,38 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
   });
   return {index,node,parentNode};
 };
+//找到指定节点的所有祖先节点
+export const findParents = (virtualDomData:VirtualDom[],matchId:string)=>{
+  const parents:string[] = [];
+  let isOk = false;
+  const idMapToParentId:{
+    [propName:string]:string
+  } = {};
+  const loop = function(data:VirtualDom[],id:string,parentId:string){
+    for(let i = 0;i<data.length;i++){
+      const item = data[i];
+      const {id,children} = item;
+      idMapToParentId[id]=parentId;
+      if(id===matchId){
+        isOk = true;
+      }else{
+        isArray(children)&&loop(children,matchId,id);
+      }
+      if(isOk) break;
+    }
+  }
+  loop(virtualDomData,matchId,'root');
 
- class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
+  function findId(id:string){
+    if(!isUndefined(idMapToParentId[id])){
+      parents.push(idMapToParentId[id]);
+      findId(idMapToParentId[id]);
+    }
+  }
+  findId(matchId);
+  return parents;
+}
+class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
   static propTypes = {
     activeId:PropTypes.string,
     virtualDomData: PropTypes.array,
@@ -100,14 +130,11 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
       const {id,type,children} = item;
       const title = isString(type)?type:Object(type).name;
     return <TreeNode title={<div><span className="color-primary">{title}</span>-{id}</div>}key={id}>
-        {Array.isArray(children)&&this.renderTree(children)}
+        {isArray(children)&&this.renderTree(children)}
       </TreeNode>
     });
   }
-  handleTreeEnter=(info:object)=>{
-    // console.log(info);
-  }
-  handleTreeDrop=(info:any)=>{
+  handleTreeDrop=(info:AntTreeNodeDropEvent)=>{
     const {onChange,virtualDomData} = this.props;
     const dropKey = info.node.props.eventKey;
     const dragKey = info.dragNode.props.eventKey;
@@ -120,8 +147,7 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
     const dragNode = dragNodeMatchedInfo.node;
     const drogNodeParent = dragNodeMatchedInfo.parentNode;
 
-
-
+    // Find dropObject
     const dropNodeMatchedInfo = findNodeById(data,dropKey,false);
     const dropNodeIndex = dropNodeMatchedInfo.index;
     const dropNode = dropNodeMatchedInfo.node;
@@ -129,17 +155,17 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
 
     if (!info.dropToGap) {
       if(dropNode.children===undefined) dropNode.children = [];
-      if(Array.isArray(dropNode.children)){
+      if(isArray(dropNode.children)){
         dropNode.children.push(dragNode)
       }else{
-        Array.isArray(drogNodeParent.children)&&drogNodeParent.children.splice(drogNodeIndex-1,0,dragNode);
+        isArray(drogNodeParent.children)&&drogNodeParent.children.splice(drogNodeIndex-1,0,dragNode);
       }
     } else {
       const nodeList = dropNodeParent.children;
       if (dropPosition === -1) {
-        Array.isArray(nodeList)&&nodeList.splice(dropNodeIndex, 0, dragNode);
+        isArray(nodeList)&&nodeList.splice(dropNodeIndex, 0, dragNode);
       } else {
-        Array.isArray(nodeList)&&nodeList.splice(dropNodeIndex+1, 0, dragNode);
+        isArray(nodeList)&&nodeList.splice(dropNodeIndex+1, 0, dragNode);
       }
     }
     isFunction(onChange)&&onChange([].concat(data));
@@ -155,8 +181,8 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
         <Tree
           draggable
           blockNode
+          expandedKeys={findParents(virtualDomData,activeId)}
           selectedKeys={[activeId]}
-          onDragEnter={this.handleTreeEnter}
           onDrop={this.handleTreeDrop}
           onSelect={this.handleTreeSelect}>
           {
@@ -168,6 +194,6 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
   }
 }
 
-export default noElement(VirtualDomTree);
+export default VirtualDomTree;
 
 

@@ -2,16 +2,10 @@ import React from 'react';
 import {Tree} from 'antd';
 import PropTypes from 'prop-types';
 import {isString,isFunction,isUndefined,isArray} from 'lodash';
-import {VirtualDom,virtualDomTreeClassName} from '@/constant';
-import {createID} from '@/utils';
+import {VirtualDom,virtualDomTreeClassName} from '../../constant';
+import {createID} from '../../utils';
 import { AntTreeNodeDropEvent } from 'antd/lib/tree/Tree';
 const { TreeNode} = Tree;
-interface VirtualDomTreeProps{
-  virtualDomData:VirtualDom[],
-  onChange(virtualDomData:VirtualDom[]):void
-  onActiveIdChange(activeId:string):void,
-  activeId:string
-}
 
 //为节点及其子节点从新生成id
 export const recreateNodeId=(virtualNode:VirtualDom)=>{
@@ -116,14 +110,36 @@ export const findParents = (virtualDomData:VirtualDom[],matchId:string)=>{
     }
   }
   findId(matchId);
-  return parents;
+  return parents.filter((id)=>id!=='root');
+}
+interface VirtualDomTreeProps{
+  virtualDomData:VirtualDom[],
+  onChange(virtualDomData:VirtualDom[]):void
+  onActiveIdChange(activeId:string):void,
+  activeId:string
+}
+interface VirtualDomTreeState{
+  expandedKeys:string[]
 }
 class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
+  readonly state:VirtualDomTreeState = {
+    expandedKeys:[]
+  }
   static propTypes = {
     activeId:PropTypes.string,
     virtualDomData: PropTypes.array,
     onChange:PropTypes.func,
     onActiveIdChange:PropTypes.func
+  }
+  static getDerivedStateFromProps(nextProps:VirtualDomTreeProps, prevState:VirtualDomTreeState) {
+    const {virtualDomData,activeId} = nextProps;
+    const {expandedKeys} = prevState
+    if(expandedKeys.length===0){
+      return {
+        expandedKeys:findParents(virtualDomData,activeId)
+      };
+    }
+    return null;
   }
   renderTree(data:VirtualDom[]):any{
     return data.map((item)=>{
@@ -174,15 +190,22 @@ class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
     const {onActiveIdChange} = this.props;
     onActiveIdChange&&selectedKeys.length>0&&onActiveIdChange(selectedKeys[0]);
   }
+  handleTreeExpand=(expandedKeys:string[])=>{
+    this.setState({
+      expandedKeys
+    });
+  }
   render() {
     const {activeId,virtualDomData} = this.props;
+    const {expandedKeys} = this.state;
     return (
       <div className={virtualDomTreeClassName}>
         <Tree
           draggable
           blockNode
-          expandedKeys={findParents(virtualDomData,activeId)}
+          expandedKeys={expandedKeys}
           selectedKeys={[activeId]}
+          onExpand={this.handleTreeExpand}
           onDrop={this.handleTreeDrop}
           onSelect={this.handleTreeSelect}>
           {

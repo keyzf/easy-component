@@ -14,10 +14,7 @@ module.exports = {
   },
   devtool: "cheap-module-eval-source-map",
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
-    alias: {
-      '@':path.resolve(__dirname,'src')
-    }
+    extensions: [".ts", ".tsx", ".js"]
   },
   module: {
     rules: [{
@@ -53,7 +50,13 @@ module.exports = {
         'css-loader',
         'sass-loader'
       ]
-    }],
+    },{
+      test:/\.css$/,
+      use:[
+        'style-loader', //上面的简写方式
+        'css-loader'
+      ]
+    }]
   },
   plugins: [
     new CleanWebpackPlugin(),

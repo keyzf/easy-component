@@ -2,8 +2,7 @@ import React, {useState,ReactElement, ChangeEventHandler} from 'react';
 import {Input,Select,Dropdown,Slider,Radio,Icon} from 'antd';
 import {isFunction} from 'lodash';
 import { SketchPicker } from 'react-color';
-import './style.scss';
-import { nameMapToDefaultStyle,propertyItemClassName} from '@/constant';
+import { nameMapToDefaultStyle,propertyItemClassName} from '../../constant';
 import { RadioChangeEvent } from 'antd/lib/radio/interface';
 const Option = Select.Option;
 interface PropertyItemProps{
@@ -72,9 +71,9 @@ export default React.memo((props:PropertyItemProps)=>{
   }
   let content:ReactElement;
   if(type==='input'){
-    content=<Input size="small" value={innerState.value} onChange={handleInputChange}/>
+    content=<Input size="small" placeholder="请输入" value={innerState.value} onChange={handleInputChange}/>
   }else if(type==='inputWithUnit'){
-    content=<Input size="small" value={innerState.value} onChange={handleInputChange} onBlur={()=>{callback(innerState)}} onPressEnter={()=>{callback(innerState)}} addonAfter={
+    content=<Input size="small" placeholder="请输入" value={innerState.value} onChange={handleInputChange} onBlur={()=>{callback(innerState)}} onPressEnter={()=>{callback(innerState)}} addonAfter={
       <Select size="small" value={innerState.unit} onChange={handleChange.bind(this,'unit')}>
         {
           units.map((item)=><Option key={item} value={item}>{item}</Option>)
@@ -82,13 +81,13 @@ export default React.memo((props:PropertyItemProps)=>{
       </Select>
     }/>
   }else if(type==='select'){
-    content=<Select size="small" style={{minWidth:'100%'}} placeholder="请选择" allowClear={allowClear} value={innerState.value} onChange={handleChange.bind(this,'value')}>
+    content=<Select size="small" style={{minWidth:'100%'}} placeholder="请选择" allowClear={allowClear} value={innerState.value===''?undefined:innerState.value} onChange={handleChange.bind(this,'value')}>
     {
       (options as string[]).map((item)=><Option key={item} value={item}>{item}</Option>)
     }
   </Select>
   }else if(type==='colorPicker'){
-    content=<Input size="small" value={innerState.value} onChange={handleInputChange} addonAfter={
+    content=<Input size="small" placeholder="请输入" value={innerState.value} onChange={handleInputChange} addonAfter={
       <Dropdown visible={colorPickerVisible} overlay={<SketchPicker color={innerState.value} onChangeComplete={handleColorChange}/>}>
         <a href="javascript:void(0);" style={{display:'block',height:10,width:10,background:innerState.value}} onClick={()=>{setColorPickerVisible(true)}}></a>
       </Dropdown>

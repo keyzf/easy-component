@@ -1,15 +1,14 @@
 import React, { FunctionComponent} from 'react';
 import classnames from 'classnames';
-import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal,Layout} from 'antd';
+import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import {mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from '@/constant';
-import {createID} from '@/utils';
-import DrawingBoard from '@/components/drawingBoard';
-import PropertyInfo from '@/components/propertyInfo';
-import VirtualDomTree,{findNodeById,recreateNodeId} from '@/components/virtualDomTree';
-import ElementsPane from '@/components/elementsPane';
+import {mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from './constant';
+import {createID} from './utils';
+import DrawingBoard from './components/drawingBoard';
+import PropertyInfo from './components/propertyInfo';
+import VirtualDomTree,{findNodeById,recreateNodeId} from './components/virtualDomTree';
+import ElementsPane from './components/elementsPane';
 import {cloneDeep,isUndefined} from 'lodash';
-import '@/scss/main.scss';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 
@@ -281,9 +280,9 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               <TabPane tab="结构" key="virtualDomTree"></TabPane>
               <TabPane tab="属性" key="propertyInfo"></TabPane>
             </Tabs>
-            {activeTab==='elementsPane'&&<ElementsPane activeId={activeId}/>}
-            {activeTab==='virtualDomTree'&& <VirtualDomTree activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange} onActiveIdChange={this.handleActiveIdChange}/>}
-            {activeTab==='propertyInfo'&& <PropertyInfo activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange}/>}
+            {activeTab==='elementsPane'&&<ElementsPane key={`ElementsPane-${activeId}`} activeId={activeId}/>}
+            {activeTab==='virtualDomTree'&& <VirtualDomTree key={`VirtualDomTree-${activeId}`} activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange} onActiveIdChange={this.handleActiveIdChange}/>}
+            {activeTab==='propertyInfo'&& <PropertyInfo key={`PropertyInfo-${activeId}`} activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange}/>}
           </div>
         </div>
       </LocaleProvider>

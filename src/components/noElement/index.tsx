@@ -1,4 +1,4 @@
-import React,{ComponentType, ComponentClass, FunctionComponent} from 'react';
+import React,{ComponentType} from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 interface BasicProps{

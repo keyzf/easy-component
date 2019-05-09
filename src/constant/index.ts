@@ -15,11 +15,11 @@ export const virtualDomTreeClassName:string = `${prefixClassName}-comp-virtual-d
 export const headerHeight:number = 45;
 export type OperationType = 'delete' | 'copy' | 'findParent';
 export const nameMapToDefaultStyle:{
-  [propName:string]:string
+  [propName:string]:string|undefined
 } = {
-  position:'static',
-  width:'auto',
-  height:'auto',
+  position:undefined,
+  width:'',
+  height:'',
   top:'0px',
   right:'0px',
   bottom:'0px',
@@ -32,10 +32,10 @@ export const nameMapToDefaultStyle:{
   paddingRight:'0px',
   paddingBottom:'0px',
   paddingLeft:'0px',
-  fontSize:'inherit',
-  fontWeight:'400',
+  fontSize:'',
+  fontWeight:'',
   color:'',
-  lineHeight:'normal',
+  lineHeight:'',
   textAlign:'left',
   opacity:'1',
   background:'',

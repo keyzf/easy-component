@@ -2,11 +2,10 @@ import React, {ReactElement,DragEvent} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {assign,isFunction} from 'lodash';
-import {drawingBoardClassName,prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
-import ToolBar from '@/components/toolBar';
-import {moveNode} from '@/components/virtualDomTree';
+import {drawingBoardClassName,prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '../../constant';
+import ToolBar from '../toolBar';
+import {moveNode} from '../virtualDomTree';
 import {dropTarget} from '../dragDrop';
-import './style.scss';
 interface DrawingBoardProps{
   status:string,
   virtualDomData:VirtualDom[],

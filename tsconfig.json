@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esNext",
+    "module": "es6",
     "moduleResolution": "node",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
@@ -9,7 +9,6 @@
     "skipLibCheck":true,
     "listFiles":true,
     "target": "es5",
-    "outDir": "./lib",
     "baseUrl":".",
     "paths": {
       "@/*":["src/*"]

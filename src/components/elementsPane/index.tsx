@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import noElement from '@/components/noElement';
-import {elementsPaneClassName} from '@/constant'
+import noElement from '../noElement';
+import {elementsPaneClassName} from '../../constant'
 
 interface ElementsPaneProps{
   activeId:string

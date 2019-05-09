@@ -1,8 +1,7 @@
 import React,{MouseEvent,DragEvent} from 'react';
 import PropTypes from 'prop-types';
 import {Icon} from 'antd';
-import {toolBarClassName,OperationType} from '@/constant';
-import './style.scss';
+import {toolBarClassName,OperationType} from '../../constant';
 
 interface ToolBarState{
   visible:boolean,

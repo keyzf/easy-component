@@ -1,20 +1,29 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement,DragEvent} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import {assign} from 'lodash';
+import {assign,isFunction} from 'lodash';
 import {prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '@/constant';
 import ToolBar from '@/components/toolBar';
+import {moveNode} from '@/components/virtualDomTree';
+import {dropTarget} from '../dragDrop';
 import './style.scss';
 interface ComponentDrawingBoardProps{
   status:string,
   virtualDomData:VirtualDom[],
   activeId:string,
+  onChange(virtualDomData:VirtualDom[]):void,
   onActiveIdChange(activeId:string):void,
   onRemove():void,
   onCopy():void,
   onFindParent():void,
 }
-export default class ComponentDrawingBoard extends React.PureComponent<ComponentDrawingBoardProps>{
+interface ComponentDrawingBoardState{
+  hoverId:string
+}
+export default class ComponentDrawingBoard extends React.PureComponent<ComponentDrawingBoardProps,ComponentDrawingBoardState>{
+  readonly state = {
+    hoverId:''
+  }
   static propTypes = {
     onActiveIdChange:PropTypes.func,
     onRemove:PropTypes.func,
@@ -24,26 +33,57 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
   ToolBar:any
   renderVirtualDom(data?:VirtualDom []|string):ReactElement[]|string{
     const {status,activeId,onActiveIdChange} = this.props;
+    const {hoverId} = this.state;
     return Array.isArray(data)?data.map((item)=>{
       const {id,type,props={},style,children} = item;
       const newProps = {...props};
 
-      if(['preview','no-border'].indexOf(status)<0){
-        newProps['data-highlightab']='1';
-      }
       if(!newProps.key){
         newProps.key=id;
       }
       newProps.style=assign({},newProps.style,style);
       newProps.className = classnames(newProps.className,{
-        [activeClassName]:activeId===id
+        [activeClassName]:activeId===id,
+        [`${prefixClassName}-outline`]:['preview','no-border'].indexOf(status)<0,
+        [`${prefixClassName}-hover-outline`]:hoverId===id
       });
       newProps.onClick = (e:MouseEvent)=>{
         e.stopPropagation();
         onActiveIdChange(id);
       }
-      return React.createElement(type,newProps,this.renderVirtualDom(children));
+      const componentType=dropTarget({
+        onDrop:this.handleDrop,
+        onDragOver:this.handleDragOver.bind(this,item)
+      })(type)
+      return React.createElement(componentType,newProps,this.renderVirtualDom(children));
     }):data;
+  }
+  handleDragStart=(e:DragEvent<HTMLLIElement>)=>{
+    console.log('开始拖拽');
+    this.ToolBar.hide();
+  }
+  handleDrop=(e:DragEvent<HTMLElement>)=>{
+    const {virtualDomData,activeId,onChange} = this.props;
+    const {hoverId} = this.state;
+    this.ToolBar.show();
+    this.setState({
+      hoverId:''
+    });
+    const newVirtualDomData = moveNode(virtualDomData,activeId,hoverId);
+    isFunction(onChange)&&onChange(newVirtualDomData);
+    console.log('放置');
+  }
+  handleDragOver=(virtualDom:VirtualDom,e:DragEvent<HTMLElement>)=>{
+    e.preventDefault();
+    e.stopPropagation();
+    const {id,isDrop} = virtualDom;
+    const {hoverId} = this.state;
+    if(id!==hoverId&&isDrop){
+      this.setState({
+        hoverId:virtualDom.id
+      });
+    }
+    console.log('移动中');
   }
   componentDidUpdate(){
     const {status} = this.props
@@ -62,16 +102,32 @@ export default class ComponentDrawingBoard extends React.PureComponent<Component
     }
   }
   render(){
-    const {status,virtualDomData,onRemove,onCopy,onFindParent} = this.props;
+    const {virtualDomData,activeId,onRemove,onCopy,onFindParent} = this.props;
     return (<div className={`${prefixClassName}-comp-drawing-board`}>
       {
-        this.renderVirtualDom(virtualDomData)
+        React.createElement('div',{
+          className:`${prefixClassName}-comp-drawing-board-main`,
+          onDrop:()=>{
+            activeId!==''&&this.ToolBar.show();
+            this.setState({
+              hoverId:''
+            });
+          },
+          onDragOver:(e:DragEvent<HTMLElement>)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            this.setState({
+              hoverId:''
+            });
+          }
+        }, this.renderVirtualDom(virtualDomData))
       }
       <ToolBar
         ref={(comp)=>this.ToolBar=comp}
         onRemove={onRemove}
         onCopy={onCopy}
-        onFindParent={onFindParent}/>
+        onFindParent={onFindParent}
+        onDragStart={this.handleDragStart}/>
     </div>);
   }
 }

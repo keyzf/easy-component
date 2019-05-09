@@ -66,12 +66,14 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
     virtualDomData:[{
       id:createID(),
       type:'div',
+      isDrop:true,
       style:{
         padding:'10px'
       },
       children:[{
         id:createID(),
         type:'div',
+        isDrop:true,
         props:{
           className:'table-wrapper',
         },
@@ -107,6 +109,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         children:[{
           id:createID(),
           type:Col,
+          isDrop:true,
           props:{
             span:4
           },
@@ -265,6 +268,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
                 status={status}
                 activeId={activeId}
                 virtualDomData={virtualDomData}
+                onChange={this.handleVirtualDomTreeChange}
                 onRemove={this.handleComponentDrawingBoardAction.bind(this,'delete')}
                 onCopy={this.handleComponentDrawingBoardAction.bind(this,'copy')}
                 onFindParent={this.handleComponentDrawingBoardAction.bind(this,'findParent')}

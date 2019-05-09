@@ -1,7 +1,7 @@
 import React from 'react';
 import {Tree} from 'antd';
 import PropTypes from 'prop-types';
-import {isString,isFunction} from 'lodash';
+import {isString,isFunction,isUndefined} from 'lodash';
 import noElement from '@/components/noElement';
 import {VirtualDom} from '@/constant';
 import {createID} from '@/utils';
@@ -25,7 +25,39 @@ export const recreateNodeId=(virtualNode:VirtualDom)=>{
   Array.isArray(virtualNode.children)&&loop(virtualNode.children)
   return virtualNode;
 }
-
+//移动节点
+export const moveNode=(virtualDomData:VirtualDom[],nodeId:string,parentId:string,index?:number)=>{
+  let parentNode:VirtualDom = null;
+  let node:VirtualDom = null;
+  const loop = function(data:VirtualDom[],parent:VirtualDom){
+    for(let i = 0;i<data.length;i++){
+      const item = data[i];
+      const {id,children} = item;
+      if(id===nodeId){
+        node = item;
+        parent&&parent.id!==parentId&&(parent.children as VirtualDom[]).splice(i,1);
+      }
+      if(id===parentId){
+        parentNode=item;
+      }
+      if(parentNode&&node) break;
+      Array.isArray(children)&&loop(children,item)
+    }
+  }
+  loop(virtualDomData,{
+    id:'root',
+    type:'div',
+    children:virtualDomData
+  });
+  if(parentNode&&parentNode.id!==parentId&&node){
+    if(isUndefined(index)){
+      parentNode.children=[].concat(parentNode.children,node)
+    }else{
+      (parentNode.children as VirtualDom[]).splice(index,0,node)
+    }
+  }
+  return [...virtualDomData]
+}
 //根据id找到节点
 export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete:boolean):{index:number,parentNode:VirtualDom,node:VirtualDom}=>{
   let parentNode = null;
@@ -50,7 +82,7 @@ export const findNodeById = (virtualDomData:VirtualDom[],matchId:string,isDelete
   }
   loop(virtualDomData,matchId,{
     id:'root',
-    type:'root',
+    type:'div',
     children:virtualDomData
   });
   return {index,node,parentNode};

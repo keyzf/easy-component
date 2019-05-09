@@ -1,10 +1,11 @@
-import React,{MouseEvent} from 'react';
+import React,{MouseEvent,DragEvent} from 'react';
 import PropTypes from 'prop-types';
 import {Icon} from 'antd';
 import {toolBarClassName,OperationType} from '@/constant';
 import './style.scss';
 
 interface ToolBarState{
+  visible:boolean,
   toolList:any[],
   top:number,
   left:number
@@ -14,9 +15,11 @@ interface ToolBarProps{
   onRemove():void,
   onCopy():void,
   onFindParent():void,
+  onDragStart(e:DragEvent<HTMLLIElement>):void
 }
 export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarState> {
   readonly state ={
+    visible:true,
     toolList:[{
       label:<Icon type="arrow-up" />,
       value:'findParent'
@@ -44,6 +47,16 @@ export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarSta
       left
     });
   }
+  hide(){
+    this.setState({
+      visible:false
+    });
+  }
+  show(){
+    this.setState({
+      visible:true
+    });
+  }
   handleAction=(type:OperationType,e:MouseEvent<HTMLLIElement>)=>{
     e.stopPropagation();
     const {onRemove,onCopy,onFindParent} = this.props;
@@ -62,15 +75,28 @@ export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarSta
     }
   }
   render() {
-    const {toolList,left,top} = this.state;
+    const {visible,toolList,left,top} = this.state;
+    const {onDragStart} = this.props;
     return (
       <div className={toolBarClassName} style={{
         left,
-        top
+        top,
+        opacity:Number(visible)
       }}>
         <ul className="tool-list">
           {
-            toolList.map((tool)=><li key={tool.value} className="tool-item" onClick={this.handleAction.bind(this,tool.value)}>{tool.label}</li>)
+            toolList.map((tool)=>{
+              const toolProps:any= {
+                key:tool.value,
+                className:"tool-item",
+                onClick:this.handleAction.bind(this,tool.value)
+              }
+              if(tool.value==='drag'){
+                toolProps.draggable=true;
+                toolProps.onDragStart=onDragStart;
+              }
+              return <li {...toolProps}>{tool.label}</li>
+            })
           }
         </ul>
       </div>

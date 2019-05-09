@@ -85,6 +85,7 @@ export interface VirtualDom {
   style?:{
     [propName:string]:string
   },
+  isDrop?:boolean,
   children?:VirtualDom [] | string
 }
 

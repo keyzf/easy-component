@@ -4,12 +4,20 @@
   position: relative;
   overflow-x: hidden;
   overflow-y: scroll;
-  *[data-highlightab]{
-    outline: 1px dashed rgba(170,170,170,0.7);
+  .#{$prefix-class-name}-comp-drawing-board-main{
+    height: 100%;
+    width: 100%;
+  }
+  .#{$prefix-class-name}-outline{
+    outline: 1px dashed $border-color;
     outline-offset:-2px;
   }
+  .#{$prefix-class-name}-hover-outline{
+    outline: 3px solid $color-yellow !important;
+
+  }
   .#{$prefix-class-name}-#{$active-class-name}{
-    outline: 3px solid #3b97e3 !important;
+    outline: 3px solid $primary-color !important;
     outline-offset: -3px;
   }
 }

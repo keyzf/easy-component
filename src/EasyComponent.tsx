@@ -8,6 +8,7 @@ import DrawingBoard from './components/drawingBoard';
 import PropertyInfo from './components/propertyInfo';
 import VirtualDomTree,{findNodeById,recreateNodeId} from './components/virtualDomTree';
 import ElementsPane from './components/elementsPane';
+import JsonView from './components/jsonView';
 import {cloneDeep,isUndefined} from 'lodash';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -23,6 +24,7 @@ interface ActionButton {
 interface EasyComponentState{
   activeId:string,
   activeTab:string,
+  jsonViewVisible:boolean,
   virtualDomData:VirtualDom[],
   actionButtonList:ActionButton[],
   status:string
@@ -31,6 +33,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
   readonly state={
     activeId:'',
     activeTab:'virtualDomTree',
+    jsonViewVisible:false,
     actionButtonList:[{
       title:'边框',
       key:'border',
@@ -44,6 +47,10 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       style:{
         color:'rgba(170,170,170,0.7)'
       }
+    },{
+      title:'虚拟树Json',
+      key:'virtual-dom-tree',
+      icon:'code'
     },{
       title:'预览',
       key:'preview',
@@ -213,6 +220,10 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       this.setState({
         status:'normal'
       });
+    }else if(type==='virtual-dom-tree'){
+      this.setState({
+        jsonViewVisible:true
+      });
     }else if(type==='undo'&&undoRecordList.length>1){
       const{activeId,virtualDomData} = undoRecordList[1];
       redoRecordList.unshift(undoRecordList[0]);
@@ -244,7 +255,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
     });
   }
   render() {
-    const {virtualDomData,activeId,activeTab,actionButtonList,status} = this.state;
+    const {virtualDomData,activeId,activeTab,actionButtonList,status,jsonViewVisible} = this.state;
     return (
       <LocaleProvider locale={zhCN}>
         <div className={classnames(mainClassName,{
@@ -284,6 +295,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
             {activeTab==='virtualDomTree'&& <VirtualDomTree key={`VirtualDomTree-${activeId}`} activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange} onActiveIdChange={this.handleActiveIdChange}/>}
             {activeTab==='propertyInfo'&& <PropertyInfo key={`PropertyInfo-${activeId}`} activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange}/>}
           </div>
+          <JsonView visible={jsonViewVisible} json={virtualDomData} onCancel={()=>{this.setState({jsonViewVisible:false})}}/>
         </div>
       </LocaleProvider>
    );

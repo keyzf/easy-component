@@ -39,7 +39,10 @@ module.exports = {
         {
           loader:'less-loader',
           options:{
-            javascriptEnabled:true
+            javascriptEnabled:true,
+            modifyVars:{
+              // "theme-color":"yellow"
+            }
           }
         }
       ]

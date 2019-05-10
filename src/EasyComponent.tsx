@@ -209,7 +209,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         })}>
           <a className={`${prefixClassName}-btn-exit-preview`} href="javascript:void(0);" onClick={()=>this.setState({status:'normal'})}><Icon type="eye-invisible" /></a>
           <div className={`${mainClassName}-left`}>
-            <header className={`${mainClassName}-header`}>
+            <header className={`${mainClassName}-left-header`}>
               {
                 actionButtonList.filter((actionButton)=>isUndefined(actionButton.status)||actionButton.status===status).map((actionButton)=>{
                   const {title,icon,key,style} = actionButton;
@@ -219,7 +219,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               }
 
             </header>
-            <main className={`${mainClassName}-main`}>
+            <main className={`${mainClassName}-left-main`}>
               <DrawingBoard
                 status={status}
                 activeId={activeId}

@@ -1,9 +1,8 @@
 @import './variable.less';
 @btn-exit-preview:@{prefix-class-name}-btn-exit-preview;
 @left-class-name:@{mainClassName}-left;
+@left-header-class-name:@{mainClassName}-left-header;
 @right-class-name:@{mainClassName}-right;
-@header-class-name:@{mainClassName}-header;
-@main-class-name:@{mainClassName}-main;
 .@{mainClassName}{
   position: relative;
   display: flex;
@@ -14,7 +13,7 @@
   &.preview{
     .@{left-class-name}{
       padding-top: 0;
-      .@{header-class-name}{
+      .@{left-header-class-name}{
         display: none;
       }
     }
@@ -38,7 +37,7 @@
     height: 100%;
     box-sizing: border-box;
     flex-direction: column;
-    .@{header-class-name}{
+    .@{left-header-class-name}{
       height: @header-height;
       box-sizing: border-box;
       border-bottom: 1px solid #eee;
@@ -52,7 +51,7 @@
         padding: 0 4px;
       }
     }
-    .@{main-class-name}{
+    &-main{
       display: flex;
       flex: auto;
     }

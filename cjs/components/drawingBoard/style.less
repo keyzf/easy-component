@@ -1,0 +1,23 @@
+@import '../../less/variable.less';
+.@{drawingBoardClassName}{
+  flex: auto;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  .@{drawingBoardClassName}-main{
+    height: 100%;
+    width: 100%;
+  }
+  .@{prefix-class-name}-outline{
+    outline: 1px dashed @border-color;
+    outline-offset:-2px;
+  }
+  .@{prefix-class-name}-hover-outline{
+    outline: 3px solid @color-yellow !important;
+
+  }
+  .@{prefix-class-name}-@{active-class-name}{
+    outline: 3px solid @primary-color !important;
+    outline-offset: -3px;
+  }
+}

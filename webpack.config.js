@@ -14,7 +14,7 @@ module.exports = {
   },
   devtool: "cheap-module-eval-source-map",
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js",".json",".less"]
   },
   module: {
     rules: [{

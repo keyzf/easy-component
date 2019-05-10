@@ -1,0 +1,16 @@
+@import '../../less/variable.less';
+.@{toolBarClassName}{
+  position: absolute;
+  background: @primary-color;
+  color: #fff;
+  .@{toolBarClassName}-tool-list{
+    margin: 0;
+    padding: 0;
+    .@{toolBarClassName}-tool-item{
+      display: inline-block;
+      list-style: none;
+      cursor: pointer;
+      padding: 3px 7px;
+    }
+  }
+}

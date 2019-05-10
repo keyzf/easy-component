@@ -16,3 +16,7 @@ echo "Compile commonjs..."
 tsc --outDir cjs --module commonjs
 echo "Compile commonjs done"
 
+echo "Package..."
+gulp
+echo "All done"
+

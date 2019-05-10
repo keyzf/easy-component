@@ -22,6 +22,7 @@ export const recreateNodeId=(virtualNode:VirtualDom)=>{
 //移动节点
 export const moveNode=(virtualDomData:VirtualDom[],nodeId:string,parentId:string,index?:number)=>{
   let parentNode:VirtualDom = null;
+  let oldParentNode:VirtualDom = null;
   let node:VirtualDom = null;
   const loop = function(data:VirtualDom[],parent:VirtualDom){
     for(let i = 0;i<data.length;i++){
@@ -30,6 +31,7 @@ export const moveNode=(virtualDomData:VirtualDom[],nodeId:string,parentId:string
       if(id===nodeId){
         node = item;
         parent&&parent.id!==parentId&&(parent.children as VirtualDom[]).splice(i,1);
+        oldParentNode=parent;
       }
       if(id===parentId){
         parentNode=item;
@@ -43,8 +45,10 @@ export const moveNode=(virtualDomData:VirtualDom[],nodeId:string,parentId:string
     type:'div',
     children:virtualDomData
   });
-  if(parentNode&&parentNode.id!==parentId&&node){
+  if(parentNode&&oldParentNode.id!==parentId&&node){
+    console.log(isUndefined(index));
     if(isUndefined(index)){
+      if(isUndefined(parentNode.children)) parentNode.children=[];
       parentNode.children=[].concat(parentNode.children,node)
     }else{
       (parentNode.children as VirtualDom[]).splice(index,0,node)
@@ -145,7 +149,7 @@ class VirtualDomTree extends React.PureComponent<VirtualDomTreeProps>{
     return data.map((item)=>{
       const {id,type,children} = item;
       const title = isString(type)?type:Object(type).name;
-    return <TreeNode title={<div><span className="color-primary">{title}</span>-{id}</div>}key={id}>
+    return <TreeNode title={<div><span className="color-primary">{title}</span>({id})</div>}key={id}>
         {isArray(children)&&this.renderTree(children)}
       </TreeNode>
     });

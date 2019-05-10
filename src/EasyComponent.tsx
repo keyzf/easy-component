@@ -1,25 +1,30 @@
-import React, { FunctionComponent} from 'react';
+import React, { ComponentType} from 'react';
 import classnames from 'classnames';
-import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal} from 'antd';
+import {LocaleProvider ,Tabs,Icon, Tooltip,Modal} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {prefixClassName,mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from './constant';
-import {createID} from './utils';
 import DrawingBoard from './components/drawingBoard';
 import PropertyInfo from './components/propertyInfo';
 import VirtualDomTree,{findNodeById,recreateNodeId} from './components/virtualDomTree';
 import ElementsPane from './components/elementsPane';
 import JsonView from './components/jsonView';
-import {cloneDeep,isUndefined} from 'lodash';
+import {cloneDeep,isUndefined,isArray,isFunction} from 'lodash';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 
 interface EasyComponentProps{
-
+  defaultVirtualDomData?:VirtualDom[],
+  onSave?(virtualDomData:VirtualDom[]):void
 }
 
 interface ActionButton {
   title:string,
-  icon:string|FunctionComponent
+  key:string,
+  icon:string,
+  status?:'normal'|'no-border'|'preview',
+  style?:{
+    [propName:string]:number|string
+  }
 }
 interface EasyComponentState{
   activeId:string,
@@ -30,7 +35,7 @@ interface EasyComponentState{
   status:string
 }
 export default class EasyComponent extends React.PureComponent<EasyComponentProps,EasyComponentState>{
-  readonly state={
+  readonly state:EasyComponentState={
     activeId:'',
     activeTab:'virtualDomTree',
     jsonViewVisible:false,
@@ -67,91 +72,32 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       title:'清空画布',
       key:'delete',
       icon:'delete'
+    },{
+      title:'保存',
+      key:'save',
+      icon:'check'
     }],
     status:'normal',
-    virtualDomData:[{
-      id:createID(),
-      type:'div',
-      isDrop:true,
-      style:{
-        padding:'10px'
-      },
-      children:[{
-        id:createID(),
-        type:'div',
-        isDrop:true,
-        props:{
-          className:'table-wrapper',
-        },
-        style:{
-          color:'red',
-          padding:'10px'
-        },
-        children:[{
-          id:createID(),
-          type:Button,
-          props:{
-            type:'primary',
-            icon:'search'
-          },
-          children:'点击'
-        },{
-          id:createID(),
-          type:Button,
-          style:{
-            marginLeft:'10px'
-          },
-          children:'hello'
-        }]
-      },{
-        id:createID(),
-        type:Row,
-        style:{
-          paddingTop:'10px',
-          paddingRight:'20px',
-          paddingBottom:'10px',
-          paddingLeft:'10px'
-        },
-        children:[{
-          id:createID(),
-          type:Col,
-          isDrop:true,
-          props:{
-            span:4
-          },
-          style:{
-            padding:'10px'
-          },
-          children:[{
-            id:createID(),
-            type:Icon,
-            props:{
-              type:'caret-left'
-            }
-          }]
-        }]
-      }]
-    }]
+    virtualDomData:[]
+  }
+  static getDerivedStateFromProps(nextProps:EasyComponentProps, prevState:EasyComponentState) {
+    const {defaultVirtualDomData} = nextProps;
+    const {virtualDomData} = prevState;
+    if(virtualDomData.length===0&&isArray(defaultVirtualDomData)){
+      return {
+        virtualDomData:defaultVirtualDomData
+      }
+    }
   }
   handleVirtualDomTreeChange=(newVirtualDomData:VirtualDom[])=>{
-    const {activeId} = this.state;
     this.setState({
       virtualDomData:newVirtualDomData
-    });
-    undoRecordList.unshift({
-      activeId,
-      virtualDomData:newVirtualDomData
-    });
+    },this.addRecord);
   }
   handleActiveIdChange=(activeId:string)=>{
-    const {virtualDomData} = this.state;
     this.setState({
       activeId
-    });
-    undoRecordList.unshift({
-      activeId,
-      virtualDomData
-    });
+    },this.addRecord);
   }
   handleComponentDrawingBoardAction=(type:OperationType)=>{
     const {activeId,virtualDomData} = this.state;
@@ -161,35 +107,30 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
       this.setState({
         activeId:'',
         virtualDomData:data
-      });
-      undoRecordList.unshift({
-        activeId,
-        virtualDomData:data
-      });
+      },this.addRecord);
     }else if(type==='copy'){
       const {parentNode,index,node} = findNodeById(data,activeId,false);
       const copyNode = recreateNodeId(cloneDeep(node));
       Array.isArray(parentNode.children)&&parentNode.children.splice(index+1,0,copyNode);
       this.setState({
         virtualDomData:data
-      });
-      undoRecordList.unshift({
-        activeId,
-        virtualDomData
-      });
+      },this.addRecord);
     }else if(type==='findParent'){
       const {parentNode} = findNodeById(data,activeId,false);
       const newActiveId = parentNode.id==='root'?'':parentNode.id;
       this.setState({
-        activeId: parentNode.id==='root'?'':parentNode.id
-      });
-      undoRecordList.unshift({
-        activeId:newActiveId,
-        virtualDomData
-      });
+        activeId: newActiveId
+      },this.addRecord);
     }else{
       return;
     }
+  }
+  addRecord(){
+    const {activeId,virtualDomData} = this.state;
+    undoRecordList.unshift({
+      activeId,
+      virtualDomData
+    });
   }
   handleActionButtonClick=(type:string)=>{
     const {activeId,virtualDomData} = this.state;
@@ -240,6 +181,11 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         activeId,
         virtualDomData
       });
+    }else if(type==='save'){
+      const {onSave} = this.props;
+      isFunction(onSave)&&onSave(virtualDomData);
+      undoRecordList.length=0;
+      redoRecordList.length=0;
     }
   }
   handleTabChange=(key:string)=>{

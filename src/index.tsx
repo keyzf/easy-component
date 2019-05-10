@@ -1,5 +1,6 @@
 import EasyComponent from "./EasyComponent";
-export default EasyComponent;
+import {createID} from './utils';
+export {EasyComponent,createID};
 
 
 

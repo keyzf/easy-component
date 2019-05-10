@@ -1,5 +1,5 @@
-@import './variable.scss';
-.#{$mainClassName}{
+@import './variable.less';
+.@{mainClassName}{
   position: relative;
   display: flex;
   height: 100%;
@@ -22,7 +22,7 @@
       left:0;
       z-index: 1;
       display: inline;
-      background: $primary-color;
+      background: @primary-color;
       padding: 2px 4px;
       color: #fff;
     }
@@ -34,14 +34,14 @@
     box-sizing: border-box;
     flex-direction: column;
     .header{
-      height: $header-height;
+      height: @header-height;
       box-sizing: border-box;
       border-bottom: 1px solid #eee;
       color: #fff;
-      line-height: $header-height;
+      line-height: @header-height;
       padding: 0 10px;
       text-align: right;
-      background: $primary-color;
+      background: @primary-color;
       .btn-action{
         color: #fff;
         padding: 0 4px;
@@ -53,7 +53,7 @@
     }
   }
   .right{
-    width: $right-width;
+    width: @right-width;
     height: 100%;
     overflow: scroll;
     border-left: 1px solid #eee;
@@ -62,6 +62,6 @@
     }
   }
   .color-primary{
-    color: $primary-color;
+    color: @primary-color;
   }
 }

@@ -44,13 +44,6 @@ module.exports = {
         }
       ]
     },{
-      test:/\.scss$/,
-      use:[
-        'style-loader', //上面的简写方式
-        'css-loader',
-        'sass-loader'
-      ]
-    },{
       test:/\.css$/,
       use:[
         'style-loader', //上面的简写方式

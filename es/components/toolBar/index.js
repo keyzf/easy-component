@@ -92,10 +92,10 @@ var ToolBar = /** @class */ (function (_super) {
                 top: top,
                 opacity: Number(visible)
             } },
-            React.createElement("ul", { className: "tool-list" }, toolList.map(function (tool) {
+            React.createElement("ul", { className: toolBarClassName + "-tool-list" }, toolList.map(function (tool) {
                 var toolProps = {
                     key: tool.value,
-                    className: "tool-item",
+                    className: toolBarClassName + "-tool-item",
                     onClick: _this.handleAction.bind(_this, tool.value)
                 };
                 if (tool.value === 'drag') {

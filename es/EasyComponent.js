@@ -15,7 +15,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { LocaleProvider, Tabs, Button, Row, Col, Icon, Tooltip, Modal } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import { mainClassName, undoRecordList, redoRecordList } from './constant';
+import { prefixClassName, mainClassName, undoRecordList, redoRecordList } from './constant';
 import { createID } from './utils';
 import DrawingBoard from './components/drawingBoard';
 import PropertyInfo from './components/propertyInfo';
@@ -260,18 +260,18 @@ var EasyComponent = /** @class */ (function (_super) {
             React.createElement("div", { className: classnames(mainClassName, {
                     "preview": status === 'preview'
                 }) },
-                React.createElement("a", { className: "btn-exit-preview", href: "javascript:void(0);", onClick: function () { return _this.setState({ status: 'normal' }); } },
+                React.createElement("a", { className: prefixClassName + "-btn-exit-preview", href: "javascript:void(0);", onClick: function () { return _this.setState({ status: 'normal' }); } },
                     React.createElement(Icon, { type: "eye-invisible" })),
-                React.createElement("div", { className: "left" },
-                    React.createElement("header", { className: "header" }, actionButtonList.filter(function (actionButton) { return isUndefined(actionButton.status) || actionButton.status === status; }).map(function (actionButton) {
+                React.createElement("div", { className: mainClassName + "-left" },
+                    React.createElement("header", { className: mainClassName + "-header" }, actionButtonList.filter(function (actionButton) { return isUndefined(actionButton.status) || actionButton.status === status; }).map(function (actionButton) {
                         var title = actionButton.title, icon = actionButton.icon, key = actionButton.key, style = actionButton.style;
                         var wrappedContent = React.createElement("a", { className: "btn-action", href: "javascript:void(0);", onClick: _this.handleActionButtonClick.bind(_this, key) },
                             React.createElement(Icon, { style: style, type: icon }));
                         return React.createElement(Tooltip, { key: key, title: title }, wrappedContent);
                     })),
-                    React.createElement("main", { className: "main" },
+                    React.createElement("main", { className: mainClassName + "-main" },
                         React.createElement(DrawingBoard, { status: status, activeId: activeId, virtualDomData: virtualDomData, onChange: this.handleVirtualDomTreeChange, onRemove: this.handleComponentDrawingBoardAction.bind(this, 'delete'), onCopy: this.handleComponentDrawingBoardAction.bind(this, 'copy'), onFindParent: this.handleComponentDrawingBoardAction.bind(this, 'findParent'), onActiveIdChange: this.handleActiveIdChange }))),
-                React.createElement("div", { className: "right" },
+                React.createElement("div", { className: mainClassName + "-right" },
                     React.createElement(Tabs, { onChange: this.handleTabChange, activeKey: activeTab },
                         React.createElement(TabPane, { tab: "\u5143\u7D20", key: "elementsPane" }),
                         React.createElement(TabPane, { tab: "\u7ED3\u6784", key: "virtualDomTree" }),

@@ -82,14 +82,14 @@ var PropertyInfo = /** @class */ (function (_super) {
                         return react_1.default.createElement(antd_1.Col, { key: key, span: 12 },
                             react_1.default.createElement(propertyItem_1.default, { type: "inputWithUnit", name: key, label: constant_1.nameMapToLabel[key], unit: unit, units: unitOptions, value: value.replace(unitReg, ''), onChange: _this.handlePropertyChange.bind(_this, key) }));
                     })),
-                    react_1.default.createElement(antd_1.Divider, { className: "divider-title" }, "\u5916\u8FB9\u8DDD"),
+                    react_1.default.createElement(antd_1.Divider, { className: constant_1.propertyInfoClassName + "-divider-title" }, "\u5916\u8FB9\u8DDD"),
                     react_1.default.createElement(antd_1.Row, { gutter: 10 }, ['marginTop', 'marginRight', 'marginBottom', 'marginLeft'].map(function (key) {
                         var value = lodash_1.isUndefined(style[key]) ? constant_1.nameMapToDefaultStyle[key] : style[key];
                         var unit = lodash_1.isNull(value.match(unitReg)) ? 'px' : value.match(unitReg)[0];
                         return react_1.default.createElement(antd_1.Col, { key: key, span: 12 },
                             react_1.default.createElement(propertyItem_1.default, { type: "inputWithUnit", label: constant_1.nameMapToLabel[key], unit: unit, units: unitOptions, value: value.replace(unitReg, ''), onChange: _this.handlePropertyChange.bind(_this, key) }));
                     })),
-                    react_1.default.createElement(antd_1.Divider, { className: "divider-title" }, "\u5185\u8FB9\u8DDD"),
+                    react_1.default.createElement(antd_1.Divider, { className: constant_1.propertyInfoClassName + "-divider-title" }, "\u5185\u8FB9\u8DDD"),
                     react_1.default.createElement(antd_1.Row, { gutter: 10 }, ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map(function (key) {
                         var value = lodash_1.isUndefined(style[key]) ? constant_1.nameMapToDefaultStyle[key] : style[key];
                         var unit = lodash_1.isNull(value.match(unitReg)) ? 'px' : value.match(unitReg)[0];
@@ -123,7 +123,7 @@ var PropertyInfo = /** @class */ (function (_super) {
                         react_1.default.createElement(propertyItem_1.default, { type: "slider", label: constant_1.nameMapToLabel.opacity, value: opacity, onChange: this.handlePropertyChange.bind(this, 'opacity') })),
                     react_1.default.createElement("div", null,
                         react_1.default.createElement(propertyItem_1.default, { type: "colorPicker", label: constant_1.nameMapToLabel.background, value: background, onChange: this.handlePropertyChange.bind(this, 'background') })),
-                    react_1.default.createElement(antd_1.Divider, { className: "divider-title" }, "\u8FB9\u6846"),
+                    react_1.default.createElement(antd_1.Divider, { className: constant_1.propertyInfoClassName + "-divider-title" }, "\u8FB9\u6846"),
                     react_1.default.createElement(antd_1.Row, { gutter: 10 },
                         react_1.default.createElement(antd_1.Col, { span: 12 },
                             react_1.default.createElement(propertyItem_1.default, { type: "inputWithUnit", label: constant_1.nameMapToLabel.borderWidth, unit: lodash_1.isNull(borderWidth.match(unitReg)) ? 'px' : borderWidth.match(unitReg)[0], units: ['px', 'em'], value: (borderWidth).replace(unitReg, ''), onChange: this.handlePropertyChange.bind(this, 'borderWidth') })),
@@ -131,7 +131,7 @@ var PropertyInfo = /** @class */ (function (_super) {
                             react_1.default.createElement(propertyItem_1.default, { type: "select", label: constant_1.nameMapToLabel.borderStyle, options: ['solid', 'dotted', 'double', 'dashed'], allowClear: true, value: borderStyle, onChange: this.handlePropertyChange.bind(this, 'borderStyle') }))),
                     react_1.default.createElement("div", null,
                         react_1.default.createElement(propertyItem_1.default, { type: "colorPicker", label: constant_1.nameMapToLabel.borderColor, value: borderColor, onChange: this.handlePropertyChange.bind(this, 'borderColor') })),
-                    react_1.default.createElement(antd_1.Divider, { className: "divider-title" }, "\u8FB9\u6846\u5706\u89D2"),
+                    react_1.default.createElement(antd_1.Divider, { className: constant_1.propertyInfoClassName + "-divider-title" }, "\u8FB9\u6846\u5706\u89D2"),
                     react_1.default.createElement(antd_1.Row, { gutter: 10 }, ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius'].map(function (key) {
                         var value = lodash_1.isUndefined(style[key]) ? constant_1.nameMapToDefaultStyle[key] : style[key];
                         var unit = lodash_1.isNull(value.match(unitReg)) ? 'px' : value.match(unitReg)[0];

@@ -105,7 +105,7 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
     return (<div className={drawingBoardClassName}>
       {
         React.createElement('div',{
-          className:`${prefixClassName}-main`,
+          className:`${drawingBoardClassName}-main`,
           onDrop:()=>{
             activeId!==''&&this.ToolBar.show();
             this.setState({

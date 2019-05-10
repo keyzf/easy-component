@@ -84,6 +84,6 @@ export default React.memo(function (props) {
         }));
     }
     return React.createElement("div", { className: propertyItemClassName },
-        React.createElement("div", { className: "label" }, label),
-        React.createElement("div", { className: "content" }, content));
+        React.createElement("div", { className: propertyItemClassName + "-label" }, label),
+        React.createElement("div", { className: propertyItemClassName + "-content" }, content));
 });

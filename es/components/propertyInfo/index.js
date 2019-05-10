@@ -80,14 +80,14 @@ var PropertyInfo = /** @class */ (function (_super) {
                         return React.createElement(Col, { key: key, span: 12 },
                             React.createElement(PropertyItem, { type: "inputWithUnit", name: key, label: nameMapToLabel[key], unit: unit, units: unitOptions, value: value.replace(unitReg, ''), onChange: _this.handlePropertyChange.bind(_this, key) }));
                     })),
-                    React.createElement(Divider, { className: "divider-title" }, "\u5916\u8FB9\u8DDD"),
+                    React.createElement(Divider, { className: propertyInfoClassName + "-divider-title" }, "\u5916\u8FB9\u8DDD"),
                     React.createElement(Row, { gutter: 10 }, ['marginTop', 'marginRight', 'marginBottom', 'marginLeft'].map(function (key) {
                         var value = isUndefined(style[key]) ? nameMapToDefaultStyle[key] : style[key];
                         var unit = isNull(value.match(unitReg)) ? 'px' : value.match(unitReg)[0];
                         return React.createElement(Col, { key: key, span: 12 },
                             React.createElement(PropertyItem, { type: "inputWithUnit", label: nameMapToLabel[key], unit: unit, units: unitOptions, value: value.replace(unitReg, ''), onChange: _this.handlePropertyChange.bind(_this, key) }));
                     })),
-                    React.createElement(Divider, { className: "divider-title" }, "\u5185\u8FB9\u8DDD"),
+                    React.createElement(Divider, { className: propertyInfoClassName + "-divider-title" }, "\u5185\u8FB9\u8DDD"),
                     React.createElement(Row, { gutter: 10 }, ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map(function (key) {
                         var value = isUndefined(style[key]) ? nameMapToDefaultStyle[key] : style[key];
                         var unit = isNull(value.match(unitReg)) ? 'px' : value.match(unitReg)[0];
@@ -121,7 +121,7 @@ var PropertyInfo = /** @class */ (function (_super) {
                         React.createElement(PropertyItem, { type: "slider", label: nameMapToLabel.opacity, value: opacity, onChange: this.handlePropertyChange.bind(this, 'opacity') })),
                     React.createElement("div", null,
                         React.createElement(PropertyItem, { type: "colorPicker", label: nameMapToLabel.background, value: background, onChange: this.handlePropertyChange.bind(this, 'background') })),
-                    React.createElement(Divider, { className: "divider-title" }, "\u8FB9\u6846"),
+                    React.createElement(Divider, { className: propertyInfoClassName + "-divider-title" }, "\u8FB9\u6846"),
                     React.createElement(Row, { gutter: 10 },
                         React.createElement(Col, { span: 12 },
                             React.createElement(PropertyItem, { type: "inputWithUnit", label: nameMapToLabel.borderWidth, unit: isNull(borderWidth.match(unitReg)) ? 'px' : borderWidth.match(unitReg)[0], units: ['px', 'em'], value: (borderWidth).replace(unitReg, ''), onChange: this.handlePropertyChange.bind(this, 'borderWidth') })),
@@ -129,7 +129,7 @@ var PropertyInfo = /** @class */ (function (_super) {
                             React.createElement(PropertyItem, { type: "select", label: nameMapToLabel.borderStyle, options: ['solid', 'dotted', 'double', 'dashed'], allowClear: true, value: borderStyle, onChange: this.handlePropertyChange.bind(this, 'borderStyle') }))),
                     React.createElement("div", null,
                         React.createElement(PropertyItem, { type: "colorPicker", label: nameMapToLabel.borderColor, value: borderColor, onChange: this.handlePropertyChange.bind(this, 'borderColor') })),
-                    React.createElement(Divider, { className: "divider-title" }, "\u8FB9\u6846\u5706\u89D2"),
+                    React.createElement(Divider, { className: propertyInfoClassName + "-divider-title" }, "\u8FB9\u6846\u5706\u89D2"),
                     React.createElement(Row, { gutter: 10 }, ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius'].map(function (key) {
                         var value = isUndefined(style[key]) ? nameMapToDefaultStyle[key] : style[key];
                         var unit = isNull(value.match(unitReg)) ? 'px' : value.match(unitReg)[0];

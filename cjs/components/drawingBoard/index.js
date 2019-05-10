@@ -120,7 +120,7 @@ var DrawingBoard = /** @class */ (function (_super) {
         var _a = this.props, virtualDomData = _a.virtualDomData, activeId = _a.activeId, onRemove = _a.onRemove, onCopy = _a.onCopy, onFindParent = _a.onFindParent;
         return (react_1.default.createElement("div", { className: constant_1.drawingBoardClassName },
             react_1.default.createElement('div', {
-                className: constant_1.prefixClassName + "-main",
+                className: constant_1.drawingBoardClassName + "-main",
                 onDrop: function () {
                     activeId !== '' && _this.ToolBar.show();
                     _this.setState({

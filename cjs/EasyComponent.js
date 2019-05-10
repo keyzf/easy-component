@@ -262,18 +262,18 @@ var EasyComponent = /** @class */ (function (_super) {
             react_1.default.createElement("div", { className: classnames_1.default(constant_1.mainClassName, {
                     "preview": status === 'preview'
                 }) },
-                react_1.default.createElement("a", { className: "btn-exit-preview", href: "javascript:void(0);", onClick: function () { return _this.setState({ status: 'normal' }); } },
+                react_1.default.createElement("a", { className: constant_1.prefixClassName + "-btn-exit-preview", href: "javascript:void(0);", onClick: function () { return _this.setState({ status: 'normal' }); } },
                     react_1.default.createElement(antd_1.Icon, { type: "eye-invisible" })),
-                react_1.default.createElement("div", { className: "left" },
-                    react_1.default.createElement("header", { className: "header" }, actionButtonList.filter(function (actionButton) { return lodash_1.isUndefined(actionButton.status) || actionButton.status === status; }).map(function (actionButton) {
+                react_1.default.createElement("div", { className: constant_1.mainClassName + "-left" },
+                    react_1.default.createElement("header", { className: constant_1.mainClassName + "-header" }, actionButtonList.filter(function (actionButton) { return lodash_1.isUndefined(actionButton.status) || actionButton.status === status; }).map(function (actionButton) {
                         var title = actionButton.title, icon = actionButton.icon, key = actionButton.key, style = actionButton.style;
                         var wrappedContent = react_1.default.createElement("a", { className: "btn-action", href: "javascript:void(0);", onClick: _this.handleActionButtonClick.bind(_this, key) },
                             react_1.default.createElement(antd_1.Icon, { style: style, type: icon }));
                         return react_1.default.createElement(antd_1.Tooltip, { key: key, title: title }, wrappedContent);
                     })),
-                    react_1.default.createElement("main", { className: "main" },
+                    react_1.default.createElement("main", { className: constant_1.mainClassName + "-main" },
                         react_1.default.createElement(drawingBoard_1.default, { status: status, activeId: activeId, virtualDomData: virtualDomData, onChange: this.handleVirtualDomTreeChange, onRemove: this.handleComponentDrawingBoardAction.bind(this, 'delete'), onCopy: this.handleComponentDrawingBoardAction.bind(this, 'copy'), onFindParent: this.handleComponentDrawingBoardAction.bind(this, 'findParent'), onActiveIdChange: this.handleActiveIdChange }))),
-                react_1.default.createElement("div", { className: "right" },
+                react_1.default.createElement("div", { className: constant_1.mainClassName + "-right" },
                     react_1.default.createElement(antd_1.Tabs, { onChange: this.handleTabChange, activeKey: activeTab },
                         react_1.default.createElement(TabPane, { tab: "\u5143\u7D20", key: "elementsPane" }),
                         react_1.default.createElement(TabPane, { tab: "\u7ED3\u6784", key: "virtualDomTree" }),

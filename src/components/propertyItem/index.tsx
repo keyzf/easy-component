@@ -105,8 +105,8 @@ export default React.memo((props:PropertyItemProps)=>{
     </Radio.Group>
   }
   return <div className={propertyItemClassName}>
-    <div className="label">{label}</div>
-    <div className="content">
+    <div className={`${propertyItemClassName}-label`}>{label}</div>
+    <div className={`${propertyItemClassName}-content`}>
       {content}
     </div>
   </div>

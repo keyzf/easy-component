@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
@@ -19,8 +19,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+   "src"
   ],
   "exclude": [
     "node_modules"

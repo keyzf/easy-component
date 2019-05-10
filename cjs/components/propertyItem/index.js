@@ -86,6 +86,6 @@ exports.default = react_1.default.memo(function (props) {
         }));
     }
     return react_1.default.createElement("div", { className: constant_1.propertyItemClassName },
-        react_1.default.createElement("div", { className: "label" }, label),
-        react_1.default.createElement("div", { className: "content" }, content));
+        react_1.default.createElement("div", { className: constant_1.propertyItemClassName + "-label" }, label),
+        react_1.default.createElement("div", { className: constant_1.propertyItemClassName + "-content" }, content));
 });

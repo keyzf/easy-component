@@ -2,7 +2,7 @@ import React, { FunctionComponent} from 'react';
 import classnames from 'classnames';
 import {LocaleProvider ,Tabs,Button,Row,Col,Icon, Tooltip,Modal} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import {mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from './constant';
+import {prefixClassName,mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from './constant';
 import {createID} from './utils';
 import DrawingBoard from './components/drawingBoard';
 import PropertyInfo from './components/propertyInfo';
@@ -250,9 +250,9 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         <div className={classnames(mainClassName,{
           "preview":status==='preview'
         })}>
-          <a className="btn-exit-preview" href="javascript:void(0);" onClick={()=>this.setState({status:'normal'})}><Icon type="eye-invisible" /></a>
-          <div className="left">
-            <header className="header">
+          <a className={`${prefixClassName}-btn-exit-preview`} href="javascript:void(0);" onClick={()=>this.setState({status:'normal'})}><Icon type="eye-invisible" /></a>
+          <div className={`${mainClassName}-left`}>
+            <header className={`${mainClassName}-header`}>
               {
                 actionButtonList.filter((actionButton)=>isUndefined(actionButton.status)||actionButton.status===status).map((actionButton)=>{
                   const {title,icon,key,style} = actionButton;
@@ -262,7 +262,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               }
 
             </header>
-            <main className="main">
+            <main className={`${mainClassName}-main`}>
               <DrawingBoard
                 status={status}
                 activeId={activeId}
@@ -274,7 +274,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
                 onActiveIdChange={this.handleActiveIdChange}/>
             </main>
           </div>
-          <div className="right">
+          <div className={`${mainClassName}-right`}>
             <Tabs onChange={this.handleTabChange} activeKey={activeTab}>
               <TabPane tab="元素" key="elementsPane"></TabPane>
               <TabPane tab="结构" key="virtualDomTree"></TabPane>

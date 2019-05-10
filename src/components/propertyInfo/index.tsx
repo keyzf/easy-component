@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Collapse,Row,Col,Divider} from 'antd';
 import {isFunction,assign,isUndefined,isNull} from 'lodash';
-import {VirtualDom,nameMapToDefaultStyle,nameMapToLabel,propertyInfoClassName} from '../../constant';
+import {VirtualDom,nameMapToDefaultStyle,nameMapToLabel,propertyInfoClassName,prefixClassName} from '../../constant';
 import noElement from '../noElement';
 import {findNodeById} from '../virtualDomTree';
 import PropertyItem from '../propertyItem';
@@ -108,7 +108,7 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
               })
             }
           </Row>
-          <Divider className="divider-title">外边距</Divider>
+          <Divider className={`${propertyInfoClassName}-divider-title`}>外边距</Divider>
           <Row gutter={10}>
             {
               ['marginTop','marginRight','marginBottom','marginLeft'].map((key)=>{
@@ -126,7 +126,7 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
               })
             }
           </Row>
-          <Divider className="divider-title">内边距</Divider>
+          <Divider className={`${propertyInfoClassName}-divider-title`}>内边距</Divider>
           <Row gutter={10}>
             {
               ['paddingTop','paddingRight','paddingBottom','paddingLeft'].map((key)=>{
@@ -219,7 +219,7 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
               value={background}
               onChange={this.handlePropertyChange.bind(this,'background')}/>
           </div>
-          <Divider className="divider-title">边框</Divider>
+          <Divider className={`${propertyInfoClassName}-divider-title`}>边框</Divider>
           <Row gutter={10}>
             <Col span={12}>
               <PropertyItem
@@ -247,7 +247,7 @@ class PropertyInfo extends React.PureComponent<PropertyInfoProps,PropertyInfoSta
               value={borderColor}
               onChange={this.handlePropertyChange.bind(this,'borderColor')}/>
           </div>
-          <Divider className="divider-title">边框圆角</Divider>
+          <Divider className={`${propertyInfoClassName}-divider-title`}>边框圆角</Divider>
           <Row gutter={10}>
           {
               ['borderTopLeftRadius','borderTopRightRadius','borderBottomLeftRadius','borderBottomRightRadius'].map((key)=>{

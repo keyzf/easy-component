@@ -82,12 +82,12 @@ export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarSta
         top,
         opacity:Number(visible)
       }}>
-        <ul className="tool-list">
+        <ul className={`${toolBarClassName}-tool-list`}>
           {
             toolList.map((tool)=>{
               const toolProps:any= {
                 key:tool.value,
-                className:"tool-item",
+                className:`${toolBarClassName}-tool-item`,
                 onClick:this.handleAction.bind(this,tool.value)
               }
               if(tool.value==='drag'){

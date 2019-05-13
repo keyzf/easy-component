@@ -1,4 +1,4 @@
-import {ComponentType} from 'react';
+import {VirtualDom} from '../components/virtualDomTree';
 export const prefixClassName:string = 'es';
 export const activeClassName:string = `${prefixClassName}-selected-comp`;
 
@@ -81,18 +81,6 @@ export const nameMapToLabel:{
   borderTopRightRadius:'上右',
   borderBottomLeftRadius:'下左',
   borderBottomRightRadius:'下右',
-}
-export interface VirtualDom {
-  id:string,
-  type:ComponentType|string,
-  props?:{
-    [propName:string]:any
-  },
-  style?:{
-    [propName:string]:string
-  },
-  isDrop?:boolean,
-  children?:VirtualDom [] | string
 }
 
 export const redoRecordList:{

@@ -2,11 +2,11 @@ import React, { ComponentType} from 'react';
 import classnames from 'classnames';
 import {LocaleProvider ,Tabs,Icon, Tooltip,Modal} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import {prefixClassName,mainClassName,OperationType,VirtualDom,undoRecordList,redoRecordList} from './constant';
+import {prefixClassName,mainClassName,OperationType,undoRecordList,redoRecordList} from './constant';
 import DrawingBoard from './components/drawingBoard';
 import PropertyInfo from './components/propertyInfo';
-import VirtualDomTree,{findNodeById,recreateNodeId} from './components/virtualDomTree';
-import ElementsPane from './components/elementsPane';
+import VirtualDomTree,{VirtualDom,findNodeById,recreateNodeId} from './components/virtualDomTree';
+import ElementsPane,{ElementGroup} from './components/elementsPane';
 import JsonView from './components/jsonView';
 import {cloneDeep,isUndefined,isArray,isFunction} from 'lodash';
 const TabPane = Tabs.TabPane;
@@ -14,6 +14,7 @@ const confirm = Modal.confirm;
 
 interface EasyComponentProps{
   defaultVirtualDomData?:VirtualDom[],
+  elements:ElementGroup[],
   onSave?(virtualDomData:VirtualDom[]):void
 }
 
@@ -88,6 +89,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
         virtualDomData:defaultVirtualDomData
       }
     }
+    return null;
   }
   handleVirtualDomTreeChange=(newVirtualDomData:VirtualDom[])=>{
     this.setState({
@@ -202,6 +204,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
   }
   render() {
     const {virtualDomData,activeId,activeTab,actionButtonList,status,jsonViewVisible} = this.state;
+    const {elements} = this.props;
     return (
       <LocaleProvider locale={zhCN}>
         <div className={classnames(mainClassName,{
@@ -223,6 +226,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               <DrawingBoard
                 status={status}
                 activeId={activeId}
+                elements={elements}
                 virtualDomData={virtualDomData}
                 onChange={this.handleVirtualDomTreeChange}
                 onRemove={this.handleComponentDrawingBoardAction.bind(this,'delete')}
@@ -237,7 +241,7 @@ export default class EasyComponent extends React.PureComponent<EasyComponentProp
               <TabPane tab="结构" key="virtualDomTree"></TabPane>
               <TabPane tab="属性" key="propertyInfo"></TabPane>
             </Tabs>
-            {activeTab==='elementsPane'&&<ElementsPane key={`ElementsPane-${activeId}`} activeId={activeId}/>}
+            {activeTab==='elementsPane'&&<ElementsPane key={`ElementsPane-${activeId}`} activeId={activeId} elements={elements}/>}
             {activeTab==='virtualDomTree'&& <VirtualDomTree key={`VirtualDomTree-${activeId}`} activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange} onActiveIdChange={this.handleActiveIdChange}/>}
             {activeTab==='propertyInfo'&& <PropertyInfo key={`PropertyInfo-${activeId}`} activeId={activeId} virtualDomData={virtualDomData} onChange={this.handleVirtualDomTreeChange}/>}
           </div>

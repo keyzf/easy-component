@@ -1,13 +1,16 @@
 import React, {ReactElement,DragEvent} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import {assign,isFunction} from 'lodash';
-import {drawingBoardClassName,prefixClassName,activeClassName,toolBarClassName,headerHeight,VirtualDom} from '../../constant';
+import {assign,isFunction,isArray,cloneDeep} from 'lodash';
+import {drawingBoardClassName,prefixClassName,activeClassName,toolBarClassName,headerHeight} from '../../constant';
 import ToolBar from '../toolBar';
-import {moveNode} from '../virtualDomTree';
+import {ElementGroup,findElementById} from '../elementsPane';
+import {VirtualDom,moveNode,findNodeById} from '../virtualDomTree';
+import {createVirtualDomIdDeep} from '../../utils';
 import {dropTarget} from '../dragDrop';
 interface DrawingBoardProps{
   status:string,
+  elements:ElementGroup[],
   virtualDomData:VirtualDom[],
   activeId:string,
   onChange(virtualDomData:VirtualDom[]):void,
@@ -33,17 +36,18 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
   renderVirtualDom(data?:VirtualDom []|string):ReactElement[]|string{
     const {status,activeId,onActiveIdChange} = this.props;
     const {hoverId} = this.state;
+    const isDevelopment = ['preview','no-border'].indexOf(status)<0;
     return Array.isArray(data)?data.map((item)=>{
-      const {id,type,props={},style,children} = item;
+      const {id,type,props={},style,_style,children} = item;
       const newProps = {...props};
 
       if(!newProps.key){
         newProps.key=id;
       }
-      newProps.style=assign({},newProps.style,style);
+      newProps.style=assign({},isDevelopment?_style:{},newProps.style,style);
       newProps.className = classnames(newProps.className,{
-        [activeClassName]:activeId===id,
-        [`${prefixClassName}-outline`]:['preview','no-border'].indexOf(status)<0,
+        [activeClassName]:isDevelopment&&activeId===id,
+        [`${prefixClassName}-outline`]:isDevelopment,
         [`${prefixClassName}-hover-outline`]:hoverId===id
       });
       newProps.onClick = (e:MouseEvent)=>{
@@ -59,18 +63,38 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
   }
   handleDragStart=(e:DragEvent<HTMLLIElement>)=>{
     console.log('开始拖拽');
+    e.dataTransfer.setData('operationType','move');
     this.ToolBar.hide();
   }
   handleDrop=(e:DragEvent<HTMLElement>)=>{
-    const {virtualDomData,activeId,onChange} = this.props;
+    e.preventDefault();
+    e.stopPropagation();
+    const {virtualDomData,activeId,onChange,elements} = this.props;
     const {hoverId} = this.state;
-    this.ToolBar.show();
-    this.setState({
-      hoverId:''
-    });
-    const newVirtualDomData = moveNode(virtualDomData,activeId,hoverId);
-    isFunction(onChange)&&onChange(newVirtualDomData);
-    console.log('放置');
+    const operationType = e.dataTransfer.getData('operationType');
+    if(operationType==='move'){
+      this.ToolBar.show();
+      this.setState({
+        hoverId:''
+      });
+      const newVirtualDomData = moveNode(virtualDomData,activeId,hoverId);
+      isFunction(onChange)&&onChange(newVirtualDomData);
+      console.log('放置');
+    }else if(operationType==='add'){
+      const insertNodeId = e.dataTransfer.getData('elementId');
+      const {node} = findNodeById(virtualDomData,hoverId,false);
+      const insertElement = cloneDeep(findElementById(elements,insertNodeId));
+      if(!isArray(node.children)){
+        node.children=[];
+      }
+      createVirtualDomIdDeep(insertElement.virtualDomData);
+      (node.children as VirtualDom[]).push(insertElement.virtualDomData);
+      this.setState({
+        hoverId:''
+      });
+      isFunction(onChange)&&onChange([...virtualDomData]);
+      console.log('放置');
+    }
   }
   handleDragOver=(virtualDom:VirtualDom,e:DragEvent<HTMLElement>)=>{
     e.preventDefault();

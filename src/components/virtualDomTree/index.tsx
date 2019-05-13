@@ -1,18 +1,32 @@
-import React from 'react';
+import React,{ComponentType} from 'react';
 import {Tree} from 'antd';
 import PropTypes from 'prop-types';
 import {isString,isFunction,isUndefined,isArray} from 'lodash';
-import {VirtualDom,virtualDomTreeClassName} from '../../constant';
-import {createID} from '../../utils';
+import {virtualDomTreeClassName} from '../../constant';
+import {createVirtualDomId} from '../../utils';
 import { AntTreeNodeDropEvent } from 'antd/lib/tree/Tree';
 const { TreeNode} = Tree;
-
+export interface VirtualDom {
+  id?:string,
+  type:ComponentType|string,
+  props?:{
+    [propName:string]:any
+  },
+  style?:{
+    [propName:string]:string
+  },
+  _style?:{
+    [propName:string]:string
+  }
+  isDrop?:boolean,
+  children?:VirtualDom [] | string
+}
 //为节点及其子节点从新生成id
 export const recreateNodeId=(virtualNode:VirtualDom)=>{
-  virtualNode.id=createID();
+  virtualNode.id=createVirtualDomId();
   const loop = function(data:VirtualDom[]){
     data.forEach((item)=>{
-      item.id=createID();
+      item.id=createVirtualDomId();
       isArray(item.children)&&loop(item.children)
     })
   }

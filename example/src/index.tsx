@@ -1,19 +1,19 @@
 import React from 'react';
 import { render } from 'react-dom';
 import {Button,Row,Col,Icon, message} from 'antd';
-import {EasyComponent,createID} from '../../src';
+import {EasyComponent,createVirtualDomId,createElementId} from '../../src';
 import '../../src/less/index.less';
 // import '../../es/less/index.less';
 // import '../../dist/index.css';
 const defaultVirtualDomData = [{
-  id:createID(),
+  id:createVirtualDomId(),
   type:'div',
   isDrop:true,
   style:{
     padding:'10px'
   },
   children:[{
-    id:createID(),
+    id:createVirtualDomId(),
     type:'div',
     isDrop:true,
     props:{
@@ -24,7 +24,7 @@ const defaultVirtualDomData = [{
       padding:'10px'
     },
     children:[{
-      id:createID(),
+      id:createVirtualDomId(),
       type:Button,
       props:{
         type:'primary',
@@ -32,7 +32,7 @@ const defaultVirtualDomData = [{
       },
       children:'点击'
     },{
-      id:createID(),
+      id:createVirtualDomId(),
       type:Button,
       style:{
         marginLeft:'10px'
@@ -40,7 +40,7 @@ const defaultVirtualDomData = [{
       children:'hello'
     }]
   },{
-    id:createID(),
+    id:createVirtualDomId(),
     type:Row,
     style:{
       paddingTop:'10px',
@@ -49,7 +49,7 @@ const defaultVirtualDomData = [{
       paddingLeft:'10px'
     },
     children:[{
-      id:createID(),
+      id:createVirtualDomId(),
       type:Col,
       isDrop:true,
       props:{
@@ -58,14 +58,82 @@ const defaultVirtualDomData = [{
       style:{
         padding:'10px'
       },
+      _style:{
+        minHeight:'80px'
+      },
       children:[{
-        id:createID(),
+        id:createVirtualDomId(),
         type:Icon,
         props:{
           type:'caret-left'
         }
       }]
+    },{
+      id:createVirtualDomId(),
+      type:Col,
+      isDrop:true,
+      props:{
+        span:4
+      },
+      _style:{
+        minHeight:'80px'
+      },
     }]
   }]
-}]
-render(<EasyComponent defaultVirtualDomData={defaultVirtualDomData} onSave={()=>{message.success('保存成功')}}/>, document.getElementById('root'))
+}];
+const elements = [{
+  groupName:'按钮',
+  elements:[{
+    id:createElementId(),
+    name:'主要按钮',
+    image:'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2153073326,2406502881&fm=58&s=D2C7D812C0B12D800C1BB1CD0300F0A9&bpow=121&bpoh=75',
+    virtualDomData:{
+      type:Button,
+      props:{
+        type:'primary'
+      },
+      children:'主要按钮'
+    }
+  },{
+    id:createElementId(),
+    name:'次要按钮',
+    image:'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2153073326,2406502881&fm=58&s=D2C7D812C0B12D800C1BB1CD0300F0A9&bpow=121&bpoh=75',
+    virtualDomData:{
+      type:Button,
+      props:{
+        type:'info'
+      },
+      children:'次要按钮'
+    }
+  }]
+},{
+  groupName:'栅格',
+  elements:[{
+    id:createElementId(),
+    name:'二分之一',
+    image:'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2153073326,2406502881&fm=58&s=D2C7D812C0B12D800C1BB1CD0300F0A9&bpow=121&bpoh=75',
+    virtualDomData:{
+      type:Row,
+      children:[{
+        type:Col,
+        props:{
+          span:12
+        },
+        _style:{
+          minHeight:'80px'
+        },
+        isDrop:true
+      },{
+        type:Col,
+        props:{
+          span:12
+        },
+        _style:{
+          minHeight:'80px'
+        },
+        isDrop:true
+      }]
+    }
+  }]
+}];
+render(<EasyComponent defaultVirtualDomData={defaultVirtualDomData} elements={elements} onSave={()=>{message.success('保存成功')}}/>, document.getElementById('root'))

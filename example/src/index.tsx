@@ -8,14 +8,14 @@ import '../../src/less/index.less';
 const defaultVirtualDomData = [{
   id:createVirtualDomId(),
   type:'div',
-  isDrop:true,
+  canDrop:true,
   style:{
     padding:'10px'
   },
   children:[{
     id:createVirtualDomId(),
     type:'div',
-    isDrop:true,
+    canDrop:true,
     props:{
       className:'table-wrapper',
     },
@@ -51,7 +51,8 @@ const defaultVirtualDomData = [{
     children:[{
       id:createVirtualDomId(),
       type:Col,
-      isDrop:true,
+      canDrop:true,
+      canDrag:false,
       props:{
         span:4
       },
@@ -71,7 +72,8 @@ const defaultVirtualDomData = [{
     },{
       id:createVirtualDomId(),
       type:Col,
-      isDrop:true,
+      canDrop:true,
+      canDrag:false,
       props:{
         span:4
       },
@@ -122,7 +124,7 @@ const elements = [{
         _style:{
           minHeight:'80px'
         },
-        isDrop:true
+        canDrop:true
       },{
         type:Col,
         props:{
@@ -131,7 +133,7 @@ const elements = [{
         _style:{
           minHeight:'80px'
         },
-        isDrop:true
+        canDrop:true
       }]
     }
   }]

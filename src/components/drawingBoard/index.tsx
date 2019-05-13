@@ -1,7 +1,7 @@
 import React, {ReactElement,DragEvent} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import {assign,isFunction,isArray,cloneDeep} from 'lodash';
+import {assign,isFunction,isArray,cloneDeep,isUndefined} from 'lodash';
 import {drawingBoardClassName,prefixClassName,activeClassName,toolBarClassName,headerHeight} from '../../constant';
 import ToolBar from '../toolBar';
 import {ElementGroup,findElementById} from '../elementsPane';
@@ -38,7 +38,7 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
     const {hoverId} = this.state;
     const isDevelopment = ['preview','no-border'].indexOf(status)<0;
     return Array.isArray(data)?data.map((item)=>{
-      const {id,type,props={},style,_style,children} = item;
+      const {id,type,props={},style,_style,children,canDrop} = item;
       const newProps = {...props};
 
       if(!newProps.key){
@@ -54,10 +54,10 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
         e.stopPropagation();
         onActiveIdChange(id);
       }
-      const componentType=dropTarget({
+      const componentType=canDrop?dropTarget({
         onDrop:this.handleDrop,
         onDragOver:this.handleDragOver.bind(this,item)
-      })(type)
+      })(type):type;
       return React.createElement(componentType,newProps,this.renderVirtualDom(children));
     }):data;
   }
@@ -73,12 +73,12 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
     const {hoverId} = this.state;
     const operationType = e.dataTransfer.getData('operationType');
     if(operationType==='move'){
+      const newVirtualDomData = moveNode(virtualDomData,activeId,hoverId);
+      isFunction(onChange)&&onChange(newVirtualDomData);
       this.ToolBar.show();
       this.setState({
         hoverId:''
       });
-      const newVirtualDomData = moveNode(virtualDomData,activeId,hoverId);
-      isFunction(onChange)&&onChange(newVirtualDomData);
       console.log('放置');
     }else if(operationType==='add'){
       const insertNodeId = e.dataTransfer.getData('elementId');
@@ -99,9 +99,9 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
   handleDragOver=(virtualDom:VirtualDom,e:DragEvent<HTMLElement>)=>{
     e.preventDefault();
     e.stopPropagation();
-    const {id,isDrop} = virtualDom;
+    const {id} = virtualDom;
     const {hoverId} = this.state;
-    if(id!==hoverId&&isDrop){
+    if(id!==hoverId){
       this.setState({
         hoverId:virtualDom.id
       });
@@ -126,6 +126,8 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
   }
   render(){
     const {virtualDomData,activeId,onRemove,onCopy,onFindParent} = this.props;
+    const {node} = findNodeById(virtualDomData,activeId,false);
+    const canDrag = activeId&&(node.canDrag||isUndefined(node.canDrag));
     return (<div className={drawingBoardClassName}>
       {
         React.createElement('div',{
@@ -147,6 +149,7 @@ export default class DrawingBoard extends React.PureComponent<DrawingBoardProps,
       }
       <ToolBar
         ref={(comp)=>this.ToolBar=comp}
+        canDrag={canDrag}
         onRemove={onRemove}
         onCopy={onCopy}
         onFindParent={onFindParent}

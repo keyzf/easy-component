@@ -11,6 +11,7 @@ interface ToolBarState{
 }
 
 interface ToolBarProps{
+  canDrag:boolean,
   onRemove():void,
   onCopy():void,
   onFindParent():void,
@@ -75,7 +76,7 @@ export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarSta
   }
   render() {
     const {visible,toolList,left,top} = this.state;
-    const {onDragStart} = this.props;
+    const {onDragStart,canDrag} = this.props;
     return (
       <div className={toolBarClassName} style={{
         left,
@@ -84,7 +85,7 @@ export default class ToolBar extends React.PureComponent<ToolBarProps,ToolBarSta
       }}>
         <ul className={`${toolBarClassName}-tool-list`}>
           {
-            toolList.map((tool)=>{
+            toolList.filter((tool)=>tool.value==='drag'&&canDrag||tool.value!=='drag').map((tool)=>{
               const toolProps:any= {
                 key:tool.value,
                 className:`${toolBarClassName}-tool-item`,

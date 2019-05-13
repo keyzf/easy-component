@@ -18,7 +18,8 @@ export interface VirtualDom {
   _style?:{
     [propName:string]:string
   }
-  isDrop?:boolean,
+  canDrop?:boolean,
+  canDrag?:boolean,
   children?:VirtualDom [] | string
 }
 //为节点及其子节点从新生成id
